@@ -1,9 +1,15 @@
 /**
  * Cards Block Parser
  * Parses navigation cards from pharmaceutical presentations
+ * Uses content mapping when buttons are image-based (no text content)
  */
 
-export function parseCardsBlock(mainElement, document) {
+export function parseCardsBlock(mainElement, document, viewContent = {}) {
+  // If viewContent has buttons defined, skip cards block (buttons are in hero)
+  if (viewContent.buttons && viewContent.buttons.length > 0) {
+    return null;
+  }
+
   // Look for navigation sections with buttons
   const navSections = mainElement.querySelectorAll('nav[data-set-size]');
 
@@ -19,10 +25,12 @@ export function parseCardsBlock(mainElement, document) {
 
     buttons.forEach((button) => {
       const targetView = button.dataset.gotoView;
-      const buttonText = button.textContent.trim() || extractViewName(targetView);
+      // Clean view name (remove gotoSlide params)
+      const cleanView = targetView?.split(',')[0] || '';
+      const buttonText = button.textContent.trim() || extractViewName(cleanView);
 
-      if (targetView) {
-        block.rows.push([buttonText, `/${targetView}`]);
+      if (cleanView) {
+        block.rows.push([buttonText, `/venclexta/${cleanView}`]);
       }
     });
   });

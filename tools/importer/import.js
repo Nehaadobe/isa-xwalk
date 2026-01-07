@@ -17,6 +17,59 @@ import { parseISIBlock } from './parsers/isi.js';
 import { parseTabsBlock } from './parsers/tabs.js';
 
 /**
+ * View-to-content mapping for image-based SSWeaver presentations
+ * Since content is rendered as images, we need static mappings for text extraction
+ */
+const VIEW_CONTENT_MAP = {
+  'aml-home': {
+    heroHeadline: 'VENCLEXTA + AZACITIDINE',
+    heroSubhead: 'PATIENTS LIVE LONGER',
+    heroText: 'In the VIALE-A trial, patients treated with VENCLEXTA + azacitidine had significantly longer overall survival vs azacitidine alone.',
+    buttons: [
+      { label: 'Overall Survival', link: '/venclexta/aml-efficacy', primary: true },
+      { label: 'Remission (CR and CR+CRi)', link: '/venclexta/aml-efficacy', primary: true },
+      { label: 'Safety Profile', link: '/venclexta/aml-safety' },
+      { label: 'Patient Profiles', link: '/venclexta/aml-patient-profiles' },
+      { label: 'Initiation', link: '/venclexta/aml-initiation' },
+      { label: 'Management', link: '/venclexta/aml-management' },
+    ],
+  },
+  'aml-efficacy': {
+    heroHeadline: 'EFFICACY',
+    heroSubhead: 'Overall Survival Results',
+    heroText: 'VENCLEXTA + azacitidine demonstrated statistically significant improvement in overall survival.',
+  },
+  'aml-safety': {
+    heroHeadline: 'SAFETY',
+    heroSubhead: 'Safety Profile',
+    heroText: 'Review the safety profile of VENCLEXTA + azacitidine.',
+  },
+  'aml-patient-profiles': {
+    heroHeadline: 'PATIENT PROFILES',
+    heroSubhead: 'Real Patient Cases',
+  },
+  'aml-initiation': {
+    heroHeadline: 'INITIATION',
+    heroSubhead: 'Starting Treatment',
+  },
+  'aml-management': {
+    heroHeadline: 'MANAGEMENT',
+    heroSubhead: 'Managing Treatment',
+  },
+};
+
+/**
+ * Extract view name from URL
+ */
+function getViewName(url) {
+  const urlObj = new URL(url);
+  const path = urlObj.pathname;
+  // Extract view name from path like /aml-home/index.html
+  const match = path.match(/\/([^/]+)\/(?:index\.html)?$/);
+  return match ? match[1] : 'aml-home';
+}
+
+/**
  * Main transformation function
  * @param {Document} document - The source document
  * @param {string} url - The source URL
@@ -29,19 +82,23 @@ export default function transform(document, url) {
   // Extract page metadata
   const metadata = extractMetadata(document, url);
 
+  // Determine view from URL and get content mapping
+  const viewName = getViewName(url);
+  const viewContent = VIEW_CONTENT_MAP[viewName] || {};
+
   // Transform slide content
   const slideContent = main.querySelector('.ssweaverSlide');
   if (slideContent) {
-    // Parse hero section
-    const heroBlock = parseHeroBlock(slideContent, document);
+    // Parse hero section with content mapping fallback
+    const heroBlock = parseHeroBlock(slideContent, document, viewContent);
     if (heroBlock) results.push(heroBlock);
 
     // Parse stats if present
     const statsBlock = parseStatsBlock(slideContent, document);
     if (statsBlock) results.push(statsBlock);
 
-    // Parse navigation cards
-    const cardsBlock = parseCardsBlock(main, document);
+    // Parse navigation cards with content mapping
+    const cardsBlock = parseCardsBlock(main, document, viewContent);
     if (cardsBlock) results.push(cardsBlock);
   }
 

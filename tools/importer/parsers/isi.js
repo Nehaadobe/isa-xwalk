@@ -40,16 +40,17 @@ export function parseISIBlock(isiElement, document) {
 }
 
 /**
- * Default ISI sections for pharmaceutical products
+ * Default ISI sections for VENCLEXTA (venetoclax)
+ * Pre-populated with actual regulatory content for import
  */
 function getDefaultISISections() {
   return [
-    ['Indication', ''],
-    ['Contraindications', ''],
-    ['Warnings and Precautions', ''],
-    ['Adverse Reactions', ''],
-    ['Drug Interactions', ''],
-    ['Use in Specific Populations', ''],
+    ['Indication', 'VENCLEXTA is indicated in combination with azacitidine, or decitabine, or low-dose cytarabine for the treatment of newly diagnosed acute myeloid leukemia (AML) in adults 75 years or older, or who have comorbidities that preclude use of intensive induction chemotherapy.'],
+    ['Tumor Lysis Syndrome', 'Tumor lysis syndrome (TLS), including fatal events and renal failure requiring dialysis, has occurred in patients treated with VENCLEXTA.'],
+    ['Neutropenia', 'Grade 3 or 4 neutropenia occurred in patients treated with VENCLEXTA in combination with azacitidine or decitabine. Monitor blood counts and for signs of infection; manage as medically appropriate.'],
+    ['Infections', 'Fatal and serious infections such as pneumonia and sepsis have occurred in patients treated with VENCLEXTA. Monitor patients for signs and symptoms of infection and treat promptly.'],
+    ['Embryo-Fetal Toxicity', 'VENCLEXTA may cause embryo-fetal harm when administered to a pregnant woman. Advise females of reproductive potential to use effective contraception during treatment and for at least 30 days after the last dose.'],
+    ['Drug Interactions', 'Concomitant use with strong or moderate CYP3A inhibitors or P-gp inhibitors increases VENCLEXTA exposure, which may increase VENCLEXTA toxicities, including risk of TLS. Consider alternatives or adjust VENCLEXTA dosage.'],
   ];
 }
 
