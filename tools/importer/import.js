@@ -84,19 +84,21 @@ export default {
 
     // --- HERO BLOCK ---
     // Model has 3 fields: image (reference), imageAlt (text), text (richtext)
-    // Table structure must be ONE ROW with 3 COLUMNS:
+    // Single column layout - each row maps to one field:
     // | Hero |
-    // | image | imageAlt | text |
+    // | image |
+    // | imageAlt |
+    // | text |
 
-    // Column 1: image
+    // Row 1: image
     const img = document.createElement('img');
     img.src = imgSrc || '/content/dam/venclexta/aml-home.png';
     img.alt = 'AML Hero Banner';
 
-    // Column 2: imageAlt (plain text)
+    // Row 2: imageAlt (plain text)
     const imageAlt = 'AML Hero Banner';
 
-    // Column 3: text (richtext content)
+    // Row 3: text (richtext content)
     const textContent = document.createElement('div');
 
     // Headline as strong
@@ -133,8 +135,12 @@ export default {
       textContent.appendChild(p);
     });
 
-    // Single row with 3 columns matching the 3 model fields
-    const heroRows = [[img, imageAlt, textContent]];
+    // Single column - 3 rows, each with one cell
+    const heroRows = [
+      [img],       // Row 1: image field
+      [imageAlt],  // Row 2: imageAlt field
+      [textContent], // Row 3: text field
+    ];
 
     body.appendChild(createBlock(document, 'Hero', heroRows));
 
