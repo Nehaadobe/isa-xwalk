@@ -1,3 +1,10 @@
+/**
+ * Hero Block Decorator
+ * Model structure: image, imageAlt, text
+ * Row 0: image (reference)
+ * Row 1: imageAlt (text)
+ * Row 2: text (richtext with headline, stats, CTAs)
+ */
 export default function decorate(block) {
   const rows = [...block.querySelectorAll(':scope > div')];
 
@@ -12,15 +19,16 @@ export default function decorate(block) {
   heroCTAs.className = 'hero-ctas';
 
   let heroImage = null;
-  let isFirstTextRow = true;
+  let imageAlt = '';
 
   rows.forEach((row, index) => {
     const cols = [...row.querySelectorAll(':scope > div')];
+    const content = cols[0];
 
-    // First row: image
+    // Row 0: Background image
     if (index === 0) {
-      const picture = cols[0]?.querySelector('picture');
-      const img = cols[0]?.querySelector('img');
+      const picture = content?.querySelector('picture');
+      const img = content?.querySelector('img');
       if (picture) {
         heroImage = picture;
       } else if (img) {
@@ -29,40 +37,42 @@ export default function decorate(block) {
       return;
     }
 
-    // Check if row contains links (CTA buttons)
-    const hasLinks = cols[0]?.querySelector('a');
+    // Row 1: Image alt text (for accessibility)
+    if (index === 1) {
+      imageAlt = content?.textContent?.trim() || '';
+      return;
+    }
 
-    if (hasLinks) {
-      // CTA button row
-      cols.forEach((col) => {
-        const links = col.querySelectorAll('a');
-        links.forEach((link) => {
+    // Row 2: Richtext content (headline, stats, CTAs)
+    if (index === 2 && content) {
+      // Process all content elements
+      const elements = content.querySelectorAll('p, h1, h2, h3, strong');
+
+      elements.forEach((el) => {
+        // Check if element contains links (CTA buttons)
+        const link = el.querySelector('a');
+        if (link) {
           const btn = document.createElement('a');
           btn.href = link.href;
           btn.className = 'hero-btn';
           btn.textContent = link.textContent;
           heroCTAs.appendChild(btn);
-        });
-      });
-    } else {
-      // Text content row
-      const textContent = cols[0];
-      if (textContent) {
-        const html = textContent.innerHTML.trim();
-        if (html) {
-          if (isFirstTextRow) {
-            // Main headline - parse and structure it
-            const headline = document.createElement('h1');
-            headline.innerHTML = html;
-            heroText.appendChild(headline);
-            isFirstTextRow = false;
-          } else {
-            // Other text rows
-            const para = document.createElement('p');
-            para.innerHTML = html;
-            heroText.appendChild(para);
-          }
+        } else if (el.tagName === 'H1' || el.tagName === 'H2' || el.tagName === 'H3') {
+          // Headline elements
+          const headline = document.createElement('h1');
+          headline.innerHTML = el.innerHTML;
+          heroText.appendChild(headline);
+        } else if (el.tagName === 'P') {
+          // Paragraph content (stats, description)
+          const para = document.createElement('p');
+          para.innerHTML = el.innerHTML;
+          heroText.appendChild(para);
         }
+      });
+
+      // If no structured elements found, use innerHTML directly
+      if (heroText.children.length === 0 && heroCTAs.children.length === 0) {
+        heroText.innerHTML = content.innerHTML;
       }
     }
   });
@@ -70,9 +80,15 @@ export default function decorate(block) {
   // Build hero structure
   block.textContent = '';
 
+  // Add background image with alt text
   if (heroImage) {
     const imageWrapper = document.createElement('div');
     imageWrapper.className = 'hero-image';
+    if (imageAlt && heroImage.querySelector('img')) {
+      heroImage.querySelector('img').alt = imageAlt;
+    } else if (imageAlt && heroImage.tagName === 'IMG') {
+      heroImage.alt = imageAlt;
+    }
     imageWrapper.appendChild(heroImage);
     block.appendChild(imageWrapper);
   }

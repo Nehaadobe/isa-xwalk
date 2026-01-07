@@ -1,11 +1,14 @@
 /*
- * Venclexta Pharma Site Import Script
- * Converts SSWeaver pharmaceutical presentations to AEM Edge Delivery Services
+ * Venclexta Pharma Site Import Script with OCR Support
+ * Extracts text from image-based SSWeaver presentations using Tesseract.js
+ * Falls back to static content mapping if OCR fails
  *
  * Hero model fields: image, imageAlt, text
- * Block table structure must match model columns
  */
 
+/* global Tesseract */
+
+// Fallback content mapping (used when OCR fails or for validation)
 const VIEW_CONTENT = {
   heroHeadline: 'VENCLEXTA + AZACITIDINE',
   heroSubhead: 'WAS PROVEN TO HELP NEWLY DIAGNOSED AML PATIENTS LIVE LONGER',
@@ -29,6 +32,107 @@ const ISI_SECTIONS = [
   { title: 'Embryo-Fetal Toxicity', content: 'VENCLEXTA may cause embryo-fetal harm when administered to a pregnant woman. Advise females of reproductive potential to use effective contraception during treatment and for at least 30 days after the last dose.' },
   { title: 'Drug Interactions', content: 'Concomitant use with strong or moderate CYP3A inhibitors or P-gp inhibitors increases VENCLEXTA exposure, which may increase VENCLEXTA toxicities, including risk of TLS.' },
 ];
+
+/**
+ * Load Tesseract.js dynamically
+ */
+async function loadTesseract() {
+  if (typeof Tesseract !== 'undefined') {
+    return Tesseract;
+  }
+
+  return new Promise((resolve, reject) => {
+    const script = document.createElement('script');
+    script.src = 'https://cdn.jsdelivr.net/npm/tesseract.js@4/dist/tesseract.min.js';
+    script.onload = () => {
+      console.log('[OCR] Tesseract.js loaded successfully');
+      resolve(window.Tesseract);
+    };
+    script.onerror = () => {
+      console.warn('[OCR] Failed to load Tesseract.js, using fallback content');
+      reject(new Error('Failed to load Tesseract.js'));
+    };
+    document.head.appendChild(script);
+  });
+}
+
+/**
+ * Perform OCR on an image
+ * @param {string} imageSrc - Image URL or data URL
+ * @returns {Promise<string>} - Extracted text
+ */
+async function performOCR(imageSrc) {
+  try {
+    const tesseract = await loadTesseract();
+
+    console.log('[OCR] Starting OCR on image:', imageSrc);
+
+    const result = await tesseract.recognize(imageSrc, 'eng', {
+      logger: (m) => {
+        if (m.status === 'recognizing text') {
+          console.log(`[OCR] Progress: ${Math.round(m.progress * 100)}%`);
+        }
+      },
+    });
+
+    console.log('[OCR] OCR completed, confidence:', result.data.confidence);
+    return result.data.text;
+  } catch (error) {
+    console.error('[OCR] OCR failed:', error.message);
+    return null;
+  }
+}
+
+/**
+ * Parse OCR text into structured content
+ * @param {string} ocrText - Raw OCR text
+ * @returns {Object} - Structured content
+ */
+function parseOCRText(ocrText) {
+  if (!ocrText) return null;
+
+  const lines = ocrText.split('\n').filter((line) => line.trim());
+  const content = {
+    headline: '',
+    subhead: '',
+    stats: [],
+    description: '',
+    buttons: [],
+  };
+
+  // Pattern matching for pharmaceutical content
+  lines.forEach((line) => {
+    const trimmed = line.trim();
+
+    // Look for VENCLEXTA headline
+    if (trimmed.includes('VENCLEXTA') && trimmed.includes('AZACITIDINE')) {
+      content.headline = trimmed;
+    }
+    // Look for "PATIENTS LIVE LONGER" or similar
+    else if (trimmed.includes('PATIENTS') && trimmed.includes('LONGER')) {
+      content.subhead = trimmed;
+    }
+    // Look for statistical data (contains months, CI, HR)
+    else if (trimmed.includes('months') || trimmed.includes('CI:') || trimmed.includes('HR=')) {
+      content.stats.push(trimmed);
+    }
+    // Look for VIALE-A study description
+    else if (trimmed.includes('VIALE-A') || trimmed.includes('randomized')) {
+      content.description += trimmed + ' ';
+    }
+    // Look for button labels
+    else if (
+      trimmed.includes('Overall Survival')
+      || trimmed.includes('Remission')
+      || trimmed.includes('Safety')
+      || trimmed.includes('Study Design')
+    ) {
+      content.buttons.push(trimmed);
+    }
+  });
+
+  return content;
+}
 
 /**
  * Create a block table with proper structure
@@ -64,82 +168,122 @@ function createBlock(doc, name, rows) {
 }
 
 /**
- * Main transform - exports as object with transform method
+ * Build text content element from extracted or fallback content
+ */
+function buildTextContent(doc, content) {
+  const textContent = doc.createElement('div');
+
+  // Headline
+  const headline = doc.createElement('p');
+  const headlineStrong = doc.createElement('strong');
+  headlineStrong.textContent = content.headline || VIEW_CONTENT.heroHeadline;
+  headline.appendChild(headlineStrong);
+  textContent.appendChild(headline);
+
+  // Subhead
+  const subhead = doc.createElement('h1');
+  subhead.textContent = content.subhead || VIEW_CONTENT.heroSubhead;
+  textContent.appendChild(subhead);
+
+  // Stats
+  const statsText = content.stats?.length > 0
+    ? content.stats.join('\n\n')
+    : VIEW_CONTENT.heroStats;
+
+  statsText.split('\n\n').forEach((line) => {
+    const p = doc.createElement('p');
+    p.textContent = line;
+    textContent.appendChild(p);
+  });
+
+  // Description
+  const descP = doc.createElement('p');
+  descP.textContent = content.description?.trim() || VIEW_CONTENT.heroDescription;
+  textContent.appendChild(descP);
+
+  // CTA buttons
+  VIEW_CONTENT.buttons.forEach((btn) => {
+    const p = doc.createElement('p');
+    const a = doc.createElement('a');
+    a.href = btn.link;
+    a.textContent = btn.label;
+    p.appendChild(a);
+    textContent.appendChild(p);
+  });
+
+  return textContent;
+}
+
+/**
+ * Main transform with OCR support
  */
 export default {
-  transform: ({ document, url, html, params }) => {
-    // eslint-disable-next-line no-console
+  /**
+   * onLoad hook - preload Tesseract.js
+   */
+  onLoad: async ({ document, url, params }) => {
+    console.log('[VENCLEXTA IMPORT] onLoad - preloading OCR engine');
+    try {
+      await loadTesseract();
+      console.log('[VENCLEXTA IMPORT] OCR engine ready');
+    } catch (e) {
+      console.log('[VENCLEXTA IMPORT] OCR not available, will use fallback content');
+    }
+  },
+
+  /**
+   * Main transform function
+   */
+  transform: async ({ document, url, html, params }) => {
     console.log('[VENCLEXTA IMPORT] Transform called with URL:', url);
 
-    // Get the slide image before clearing
+    // Get the slide image
     const slideImg = document.querySelector('.ssweaverSlide img.slide');
     const imgSrc = slideImg?.src || '';
-
-    // eslint-disable-next-line no-console
     console.log('[VENCLEXTA IMPORT] Found slide image:', imgSrc);
 
-    // Clear the body completely
+    // Try OCR extraction
+    let extractedContent = null;
+    if (imgSrc) {
+      console.log('[VENCLEXTA IMPORT] Attempting OCR extraction...');
+      const ocrText = await performOCR(imgSrc);
+      if (ocrText) {
+        console.log('[VENCLEXTA IMPORT] OCR Text:', ocrText.substring(0, 200) + '...');
+        extractedContent = parseOCRText(ocrText);
+      }
+    }
+
+    // Use OCR content or fall back to static mapping
+    const content = extractedContent || {
+      headline: VIEW_CONTENT.heroHeadline,
+      subhead: VIEW_CONTENT.heroSubhead,
+      stats: VIEW_CONTENT.heroStats.split('\n\n'),
+      description: VIEW_CONTENT.heroDescription,
+    };
+
+    console.log('[VENCLEXTA IMPORT] Using content:', extractedContent ? 'OCR extracted' : 'Static fallback');
+
+    // Clear the body
     const { body } = document;
     body.innerHTML = '';
 
     // --- HERO BLOCK ---
-    // Model has 3 fields: image (reference), imageAlt (text), text (richtext)
-    // Single column layout - each row maps to one field:
-    // | Hero |
-    // | image |
-    // | imageAlt |
-    // | text |
-
     // Row 1: image
     const img = document.createElement('img');
     img.src = imgSrc || '/content/dam/venclexta/aml-home.png';
     img.alt = 'AML Hero Banner';
 
-    // Row 2: imageAlt (plain text)
+    // Row 2: imageAlt
     const imageAlt = 'AML Hero Banner';
 
-    // Row 3: text (richtext content)
-    const textContent = document.createElement('div');
+    // Row 3: text (richtext)
+    const textContent = buildTextContent(document, content);
 
-    // Headline as strong
-    const headline = document.createElement('p');
-    const headlineStrong = document.createElement('strong');
-    headlineStrong.textContent = VIEW_CONTENT.heroHeadline;
-    headline.appendChild(headlineStrong);
-    textContent.appendChild(headline);
-
-    // Subhead as h1
-    const subhead = document.createElement('h1');
-    subhead.textContent = VIEW_CONTENT.heroSubhead;
-    textContent.appendChild(subhead);
-
-    // Stats paragraphs
-    VIEW_CONTENT.heroStats.split('\n\n').forEach((line) => {
-      const p = document.createElement('p');
-      p.textContent = line;
-      textContent.appendChild(p);
-    });
-
-    // Description
-    const descP = document.createElement('p');
-    descP.textContent = VIEW_CONTENT.heroDescription;
-    textContent.appendChild(descP);
-
-    // CTA buttons as paragraph with links
-    VIEW_CONTENT.buttons.forEach((btn) => {
-      const p = document.createElement('p');
-      const a = document.createElement('a');
-      a.href = btn.link;
-      a.textContent = btn.label;
-      p.appendChild(a);
-      textContent.appendChild(p);
-    });
-
-    // Single column - 3 rows, each with one cell
+    // Single column - 3 rows
     const heroRows = [
-      [img],       // Row 1: image field
-      [imageAlt],  // Row 2: imageAlt field
-      [textContent], // Row 3: text field
+      [img],
+      [imageAlt],
+      [textContent],
     ];
 
     body.appendChild(createBlock(document, 'Hero', heroRows));
@@ -147,7 +291,7 @@ export default {
     // --- SECTION BREAK ---
     body.appendChild(document.createElement('hr'));
 
-    // --- ISI CONTENT (as default content) ---
+    // --- ISI CONTENT ---
     ISI_SECTIONS.forEach((section) => {
       const titleP = document.createElement('p');
       const titleStrong = document.createElement('strong');
@@ -184,7 +328,6 @@ export default {
       ['description', 'Clinical efficacy and safety information for newly diagnosed AML patients'],
     ]));
 
-    // Return array of { element, path }
     return [{
       element: body,
       path: '/venclexta/aml-home',
