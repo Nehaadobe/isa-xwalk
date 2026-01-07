@@ -3,212 +3,181 @@
  * Converts SSWeaver pharmaceutical presentations to AEM Edge Delivery Services
  */
 
-import {
-  createBlock,
-  createMetadata,
-  transformDOM,
-  WebImporter,
-} from './utils.js';
-
-import { parseHeroBlock } from './parsers/hero.js';
-import { parseStatsBlock } from './parsers/stats.js';
-import { parseCardsBlock } from './parsers/cards.js';
-import { parseISIBlock } from './parsers/isi.js';
-import { parseTabsBlock } from './parsers/tabs.js';
-
-/**
- * View-to-content mapping for image-based SSWeaver presentations
- * Since content is rendered as images, we need static mappings for text extraction
- */
-const VIEW_CONTENT_MAP = {
-  'aml-home': {
-    heroHeadline: 'VENCLEXTA + AZACITIDINE',
-    heroSubhead: 'PATIENTS LIVE LONGER',
-    heroText: 'In the VIALE-A trial, patients treated with VENCLEXTA + azacitidine had significantly longer overall survival vs azacitidine alone.',
-    buttons: [
-      { label: 'Overall Survival', link: '/venclexta/aml-efficacy', primary: true },
-      { label: 'Remission (CR and CR+CRi)', link: '/venclexta/aml-efficacy', primary: true },
-      { label: 'Safety Profile', link: '/venclexta/aml-safety' },
-      { label: 'Patient Profiles', link: '/venclexta/aml-patient-profiles' },
-      { label: 'Initiation', link: '/venclexta/aml-initiation' },
-      { label: 'Management', link: '/venclexta/aml-management' },
-    ],
-  },
-  'aml-efficacy': {
-    heroHeadline: 'EFFICACY',
-    heroSubhead: 'Overall Survival Results',
-    heroText: 'VENCLEXTA + azacitidine demonstrated statistically significant improvement in overall survival.',
-  },
-  'aml-safety': {
-    heroHeadline: 'SAFETY',
-    heroSubhead: 'Safety Profile',
-    heroText: 'Review the safety profile of VENCLEXTA + azacitidine.',
-  },
-  'aml-patient-profiles': {
-    heroHeadline: 'PATIENT PROFILES',
-    heroSubhead: 'Real Patient Cases',
-  },
-  'aml-initiation': {
-    heroHeadline: 'INITIATION',
-    heroSubhead: 'Starting Treatment',
-  },
-  'aml-management': {
-    heroHeadline: 'MANAGEMENT',
-    heroSubhead: 'Managing Treatment',
-  },
+const VIEW_CONTENT = {
+  heroHeadline: 'VENCLEXTA + AZACITIDINE',
+  heroSubhead: 'WAS PROVEN TO HELP NEWLY DIAGNOSED AML PATIENTS LIVE LONGER',
+  heroStats: 'Median Overall Survival\n\nVEN+AZA 14.7 months vs AZA 9.6 months\n\n95% CI: (11.9, 18.7) 95% CI: (7.4, 12.7)\n\nOS: HR=0.66; 95% CI: (0.52, 0.85); P<0.001',
+  heroDescription: 'VIALE-A was a randomized (2:1), multicenter, double-blind, placebo-controlled, phase 3 study that evaluated the efficacy and safety of VENCLEXTA in combination with azacitidine (VEN+AZA; N=286) vs placebo with azacitidine (PBO+AZA; N=145) in adults with newly diagnosed AML who were ≥75 years of age, or with comorbidities that precluded the use of intensive induction chemotherapy.',
+  buttons: [
+    { label: 'National Comprehensive Cancer Network (NCCN)', link: '/nccn' },
+    { label: 'Study Design', link: '/aml-study' },
+    { label: 'Overall Survival', link: '/aml-efficacy' },
+    { label: 'Remission (CR and CR+CRi)', link: '/aml-efficacy' },
+    { label: 'Transfusion Independence', link: '/aml-efficacy' },
+    { label: 'Early Assessment With Bone Marrow Biopsy', link: '/aml-management' },
+  ],
 };
 
-/**
- * Extract view name from URL
- */
-function getViewName(url) {
-  const urlObj = new URL(url);
-  const path = urlObj.pathname;
-  // Extract view name from path like /aml-home/index.html
-  const match = path.match(/\/([^/]+)\/(?:index\.html)?$/);
-  return match ? match[1] : 'aml-home';
-}
+const ISI_SECTIONS = [
+  { title: 'Indication', content: 'VENCLEXTA is indicated in combination with azacitidine, or decitabine, or low-dose cytarabine for the treatment of newly diagnosed acute myeloid leukemia (AML) in adults 75 years or older, or who have comorbidities that preclude use of intensive induction chemotherapy.' },
+  { title: 'Tumor Lysis Syndrome', content: 'Tumor lysis syndrome (TLS), including fatal events and renal failure requiring dialysis, has occurred in patients treated with VENCLEXTA.' },
+  { title: 'Neutropenia', content: 'Grade 3 or 4 neutropenia occurred in patients treated with VENCLEXTA in combination with azacitidine or decitabine. Monitor blood counts and for signs of infection; manage as medically appropriate.' },
+  { title: 'Infections', content: 'Fatal and serious infections such as pneumonia and sepsis have occurred in patients treated with VENCLEXTA. Monitor patients for signs and symptoms of infection and treat promptly.' },
+  { title: 'Embryo-Fetal Toxicity', content: 'VENCLEXTA may cause embryo-fetal harm when administered to a pregnant woman. Advise females of reproductive potential to use effective contraception during treatment and for at least 30 days after the last dose.' },
+  { title: 'Drug Interactions', content: 'Concomitant use with strong or moderate CYP3A inhibitors or P-gp inhibitors increases VENCLEXTA exposure, which may increase VENCLEXTA toxicities, including risk of TLS.' },
+];
 
 /**
- * Main transformation function
- * @param {Document} document - The source document
- * @param {string} url - The source URL
- * @returns {Object} - The transformed content
+ * Create a block table with proper structure
  */
-export default function transform(document, url) {
-  const main = document.body;
-  const results = [];
+function createBlock(doc, name, rows) {
+  const table = doc.createElement('table');
 
-  // Extract page metadata
-  const metadata = extractMetadata(document, url);
-
-  // Determine view from URL and get content mapping
-  const viewName = getViewName(url);
-  const viewContent = VIEW_CONTENT_MAP[viewName] || {};
-
-  // Transform slide content
-  const slideContent = main.querySelector('.ssweaverSlide');
-  if (slideContent) {
-    // Parse hero section with content mapping fallback
-    const heroBlock = parseHeroBlock(slideContent, document, viewContent);
-    if (heroBlock) results.push(heroBlock);
-
-    // Parse stats if present
-    const statsBlock = parseStatsBlock(slideContent, document);
-    if (statsBlock) results.push(statsBlock);
-
-    // Parse navigation cards with content mapping
-    const cardsBlock = parseCardsBlock(main, document, viewContent);
-    if (cardsBlock) results.push(cardsBlock);
-  }
-
-  // Parse ISI drawer content
-  const isiDrawer = main.querySelector('.IndicationAndIsiDrawer, .IndicationAndIsiModal');
-  if (isiDrawer) {
-    const isiBlock = parseISIBlock(isiDrawer, document);
-    if (isiBlock) results.push(isiBlock);
-  }
-
-  // Parse tabs if present (AML/CLL switcher)
-  const tabsContainer = main.querySelector('[data-indication]');
-  if (tabsContainer) {
-    const tabsBlock = parseTabsBlock(tabsContainer, document);
-    if (tabsBlock) results.push(tabsBlock);
-  }
-
-  // Add metadata block
-  results.push(createMetadata(metadata));
-
-  return {
-    element: main,
-    path: generatePath(url),
-    blocks: results,
-  };
-}
-
-/**
- * Extract metadata from document
- */
-function extractMetadata(document, url) {
-  const meta = {};
-
-  // Title
-  const title = document.querySelector('title');
-  if (title) meta.title = title.textContent;
-
-  // Description
-  const description = document.querySelector('meta[name="description"]');
-  if (description) meta.description = description.content;
-
-  // OG Image
-  const ogImage = document.querySelector('meta[property="og:image"]');
-  if (ogImage) meta['og:image'] = ogImage.content;
-
-  // Viewport/ad size for pharma presentations
-  const adSize = document.querySelector('meta[name="ad.size"]');
-  if (adSize) meta.viewport = adSize.content;
-
-  return meta;
-}
-
-/**
- * Generate EDS path from URL
- */
-function generatePath(url) {
-  const urlObj = new URL(url);
-  let path = urlObj.pathname;
-
-  // Remove index.html
-  path = path.replace(/\/index\.html$/, '');
-
-  // Remove trailing slash
-  path = path.replace(/\/$/, '');
-
-  // Default to /content if root
-  if (!path || path === '/') {
-    path = '/content/home';
-  }
-
-  return path;
-}
-
-/**
- * Create a standard EDS block
- */
-export function createEDSBlock(name, rows) {
-  const table = document.createElement('table');
-
-  // Header row with block name
-  const headerRow = document.createElement('tr');
-  const headerCell = document.createElement('th');
-  headerCell.textContent = name;
-  headerRow.appendChild(headerCell);
-  table.appendChild(headerRow);
+  // Block name row
+  const tr1 = doc.createElement('tr');
+  const th = doc.createElement('th');
+  th.colSpan = rows[0]?.length || 1;
+  th.textContent = name;
+  tr1.appendChild(th);
+  table.appendChild(tr1);
 
   // Content rows
   rows.forEach((row) => {
-    const tr = document.createElement('tr');
-    if (Array.isArray(row)) {
-      row.forEach((cell) => {
-        const td = document.createElement('td');
-        if (typeof cell === 'string') {
-          td.textContent = cell;
-        } else {
-          td.appendChild(cell);
-        }
-        tr.appendChild(td);
-      });
-    } else {
-      const td = document.createElement('td');
-      if (typeof row === 'string') {
-        td.textContent = row;
-      } else {
-        td.appendChild(row);
+    const tr = doc.createElement('tr');
+    const cells = Array.isArray(row) ? row : [row];
+    cells.forEach((cell) => {
+      const td = doc.createElement('td');
+      if (typeof cell === 'string') {
+        td.innerHTML = cell;
+      } else if (cell && cell.nodeType) {
+        td.appendChild(cell);
       }
       tr.appendChild(td);
-    }
+    });
     table.appendChild(tr);
   });
 
   return table;
 }
+
+/**
+ * Main transform - MUST export as object with transform method
+ * Function receives destructured { document, url, html, params }
+ * Returns ARRAY of { element, path } objects
+ */
+export default {
+  transform: ({ document, url, html, params }) => {
+    // eslint-disable-next-line no-console
+    console.log('[VENCLEXTA IMPORT] Transform called with URL:', url);
+    console.log('[VENCLEXTA IMPORT] Original URL:', params?.originalURL);
+
+    // Get the slide image before clearing
+    const slideImg = document.querySelector('.ssweaverSlide img.slide');
+    const imgSrc = slideImg?.src || '';
+
+    // eslint-disable-next-line no-console
+    console.log('[VENCLEXTA IMPORT] Found slide image:', imgSrc);
+
+    // Clear the body completely
+    const { body } = document;
+    body.innerHTML = '';
+
+    // --- HERO BLOCK ---
+    const heroRows = [];
+
+    // Row 1: Hero image
+    if (imgSrc) {
+      const img = document.createElement('img');
+      img.src = imgSrc;
+      img.alt = 'AML Hero Banner';
+      heroRows.push([img]);
+    }
+
+    // Row 2: Text content
+    const textDiv = document.createElement('div');
+
+    const p1 = document.createElement('p');
+    const strong1 = document.createElement('strong');
+    strong1.textContent = VIEW_CONTENT.heroHeadline;
+    p1.appendChild(strong1);
+    textDiv.appendChild(p1);
+
+    const h1 = document.createElement('h1');
+    h1.textContent = VIEW_CONTENT.heroSubhead;
+    textDiv.appendChild(h1);
+
+    VIEW_CONTENT.heroStats.split('\n\n').forEach((line) => {
+      const p = document.createElement('p');
+      p.textContent = line;
+      textDiv.appendChild(p);
+    });
+
+    const descP = document.createElement('p');
+    descP.textContent = VIEW_CONTENT.heroDescription;
+    textDiv.appendChild(descP);
+
+    heroRows.push([textDiv]);
+
+    // Row 3: Buttons
+    const btnDiv = document.createElement('div');
+    VIEW_CONTENT.buttons.forEach((btn) => {
+      const p = document.createElement('p');
+      const a = document.createElement('a');
+      a.href = btn.link;
+      a.textContent = btn.label;
+      p.appendChild(a);
+      btnDiv.appendChild(p);
+    });
+    heroRows.push([btnDiv]);
+
+    body.appendChild(createBlock(document, 'Hero', heroRows));
+
+    // --- SECTION BREAK ---
+    body.appendChild(document.createElement('hr'));
+
+    // --- ISI CONTENT ---
+    ISI_SECTIONS.forEach((section) => {
+      const titleP = document.createElement('p');
+      const titleStrong = document.createElement('strong');
+      titleStrong.textContent = section.title;
+      titleP.appendChild(titleStrong);
+      body.appendChild(titleP);
+
+      const contentP = document.createElement('p');
+      contentP.textContent = section.content;
+      body.appendChild(contentP);
+    });
+
+    // PI link
+    const piP = document.createElement('p');
+    const piText1 = document.createTextNode('Please see accompanying full ');
+    const piLink = document.createElement('a');
+    piLink.href = 'https://www.rxabbvie.com/pdf/venclexta.pdf';
+    piLink.textContent = 'Prescribing Information';
+    const piText2 = document.createTextNode('.');
+    piP.appendChild(piText1);
+    piP.appendChild(piLink);
+    piP.appendChild(piText2);
+    body.appendChild(piP);
+
+    // Trademark
+    const tmP = document.createElement('p');
+    tmP.textContent = 'VENCLEXTA® and its design are registered trademarks of AbbVie Inc.';
+    body.appendChild(tmP);
+
+    // --- SECTION BREAK ---
+    body.appendChild(document.createElement('hr'));
+
+    // --- METADATA BLOCK ---
+    body.appendChild(createBlock(document, 'Metadata', [
+      ['title', 'Venclexta AML Home - US-VEN-250060'],
+      ['description', 'Clinical efficacy and safety information for newly diagnosed AML patients'],
+    ]));
+
+    // MUST return ARRAY of { element, path }
+    return [{
+      element: body,
+      path: '/venclexta/aml-home',
+    }];
+  },
+};
