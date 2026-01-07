@@ -255,3 +255,51 @@ main .section.highlight {
   margin: 0;
   padding: 40px 0;
 }
+
+/* Safety Information (ISI) Section Styling */
+main > .section:has(> div > p > strong:first-child) {
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+main > .section > div > p > strong:only-child {
+  color: #007377;
+  font-size: 12px;
+  font-weight: 700;
+  display: block;
+  margin-top: 16px;
+}
+
+main > .section > div > p:has(> strong:only-child) {
+  margin-bottom: 4px;
+}
+
+main > .section > div > ul {
+  font-size: 12px;
+  margin-top: 4px;
+  padding-left: 20px;
+}
+
+main > .section > div > ul li {
+  margin-bottom: 6px;
+}
+
+/* ISI Indication section */
+main > .section > div > p:first-child > strong:only-child {
+  color: #333;
+  font-size: 13px;
+  text-transform: uppercase;
+}
+
+/* ISI link styling */
+main > .section > div > p > a {
+  color: #007377;
+  text-decoration: underline;
+}
+
+/* ISI trademark text */
+main > .section > div > p:last-of-type {
+  font-size: 11px;
+  color: #333;
+  margin-top: 16px;
+}

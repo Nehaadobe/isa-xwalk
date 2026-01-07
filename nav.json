@@ -1,0 +1,52 @@
+{
+  "navigation": {
+    "logo": "/icons/venclexta-logo.svg",
+    "logoAlt": "Venclexta",
+    "logoLink": "/venclexta/aml-home",
+    "items": [
+      {
+        "label": "Efficacy",
+        "link": "/venclexta/aml-efficacy",
+        "type": "primary"
+      },
+      {
+        "label": "Safety",
+        "link": "/venclexta/aml-safety",
+        "type": "primary"
+      },
+      {
+        "label": "Patient Profiles",
+        "link": "/venclexta/aml-patient-profiles",
+        "type": "primary"
+      },
+      {
+        "label": "Initiation",
+        "link": "/venclexta/aml-initiation",
+        "type": "primary"
+      },
+      {
+        "label": "Management",
+        "link": "/venclexta/aml-management",
+        "type": "primary"
+      },
+      {
+        "label": "Summary",
+        "link": "/venclexta/aml-summary",
+        "type": "primary"
+      }
+    ],
+    "utility": [
+      {
+        "label": "Prescribing Information",
+        "link": "https://www.rxabbvie.com/pdf/venclexta.pdf",
+        "style": "default",
+        "openInNewTab": true
+      },
+      {
+        "label": "ISI",
+        "link": "/venclexta/isi",
+        "style": "highlight"
+      }
+    ]
+  }
+}

@@ -214,5 +214,174 @@
         "valueType": "string"
       }
     ]
+  },
+  {
+    "id": "stat-item",
+    "fields": [
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "label",
+        "label": "Label",
+        "description": "Treatment or comparator name (e.g., VEN+AZA)"
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "value",
+        "label": "Value",
+        "description": "Statistical value (e.g., 14.7 months)"
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "confidenceInterval",
+        "label": "Confidence Interval",
+        "description": "CI range (e.g., 95% CI: 11.9, 18.7)"
+      }
+    ]
+  },
+  {
+    "id": "tab",
+    "fields": [
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "title",
+        "label": "Tab Title",
+        "description": "The label shown on the tab button"
+      },
+      {
+        "component": "richtext",
+        "valueType": "string",
+        "name": "content",
+        "label": "Tab Content",
+        "description": "Content displayed when this tab is active"
+      }
+    ]
+  },
+  {
+    "id": "isi-section",
+    "fields": [
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "title",
+        "label": "Section Title",
+        "description": "Safety information section title (e.g., Tumor Lysis Syndrome)"
+      },
+      {
+        "component": "richtext",
+        "valueType": "string",
+        "name": "content",
+        "label": "Section Content",
+        "description": "Detailed safety information content"
+      }
+    ]
+  },
+  {
+    "id": "navigation",
+    "fields": [
+      {
+        "component": "reference",
+        "valueType": "string",
+        "name": "logo",
+        "label": "Logo",
+        "description": "Brand logo image"
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "logoAlt",
+        "label": "Logo Alt Text",
+        "description": "Alternative text for logo"
+      },
+      {
+        "component": "aem-content",
+        "name": "logoLink",
+        "label": "Logo Link",
+        "description": "Link when clicking the logo"
+      }
+    ]
+  },
+  {
+    "id": "nav-item",
+    "fields": [
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "label",
+        "label": "Label",
+        "description": "Navigation item label"
+      },
+      {
+        "component": "aem-content",
+        "name": "link",
+        "label": "Link",
+        "description": "Navigation item URL"
+      },
+      {
+        "component": "select",
+        "name": "type",
+        "label": "Type",
+        "options": [
+          {
+            "name": "Primary",
+            "value": "primary"
+          },
+          {
+            "name": "Utility",
+            "value": "utility"
+          },
+          {
+            "name": "External",
+            "value": "external"
+          }
+        ]
+      },
+      {
+        "component": "boolean",
+        "name": "openInNewTab",
+        "label": "Open in New Tab",
+        "description": "Open link in a new browser tab"
+      }
+    ]
+  },
+  {
+    "id": "utility-nav",
+    "fields": [
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "label",
+        "label": "Label",
+        "description": "Utility navigation item label"
+      },
+      {
+        "component": "aem-content",
+        "name": "link",
+        "label": "Link",
+        "description": "Utility navigation item URL"
+      },
+      {
+        "component": "select",
+        "name": "style",
+        "label": "Style",
+        "options": [
+          {
+            "name": "Default",
+            "value": "default"
+          },
+          {
+            "name": "Highlight",
+            "value": "highlight"
+          },
+          {
+            "name": "Button",
+            "value": "button"
+          }
+        ]
+      }
+    ]
   }
 ]

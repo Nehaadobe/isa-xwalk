@@ -24,22 +24,68 @@
           "component": "reference",
           "valueType": "string",
           "name": "image",
-          "label": "Image",
+          "label": "Background Image",
+          "description": "Hero banner background image",
           "multi": false
         },
         {
           "component": "text",
           "valueType": "string",
           "name": "imageAlt",
-          "label": "Alt",
+          "label": "Image Alt Text",
           "value": ""
         },
         {
           "component": "richtext",
-          "name": "text",
+          "name": "headline",
           "value": "",
-          "label": "Text",
+          "label": "Headline",
+          "description": "Main headline text displayed over the image",
           "valueType": "string"
+        },
+        {
+          "component": "aem-content",
+          "name": "cta1Link",
+          "label": "CTA 1 Link"
+        },
+        {
+          "component": "text",
+          "name": "cta1Text",
+          "label": "CTA 1 Text",
+          "description": "e.g., Overall Survival"
+        },
+        {
+          "component": "aem-content",
+          "name": "cta2Link",
+          "label": "CTA 2 Link"
+        },
+        {
+          "component": "text",
+          "name": "cta2Text",
+          "label": "CTA 2 Text",
+          "description": "e.g., Remission"
+        },
+        {
+          "component": "aem-content",
+          "name": "cta3Link",
+          "label": "CTA 3 Link"
+        },
+        {
+          "component": "text",
+          "name": "cta3Text",
+          "label": "CTA 3 Text",
+          "description": "e.g., Study Design"
+        },
+        {
+          "component": "aem-content",
+          "name": "cta4Link",
+          "label": "CTA 4 Link"
+        },
+        {
+          "component": "text",
+          "name": "cta4Text",
+          "label": "CTA 4 Text",
+          "description": "e.g., Transfusion Independence"
         }
       ]
     }

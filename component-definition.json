@@ -156,6 +156,148 @@
               }
             }
           }
+        },
+        {
+          "title": "Stats",
+          "id": "stats",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block",
+                "template": {
+                  "name": "Stats",
+                  "filter": "stats"
+                }
+              }
+            }
+          }
+        },
+        {
+          "title": "Stat Item",
+          "id": "stat-item",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block/item",
+                "template": {
+                  "name": "Stat Item",
+                  "model": "stat-item"
+                }
+              }
+            }
+          }
+        },
+        {
+          "title": "Tabs",
+          "id": "tabs",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block",
+                "template": {
+                  "name": "Tabs",
+                  "filter": "tabs"
+                }
+              }
+            }
+          }
+        },
+        {
+          "title": "Tab",
+          "id": "tab",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block/item",
+                "template": {
+                  "name": "Tab",
+                  "model": "tab"
+                }
+              }
+            }
+          }
+        },
+        {
+          "title": "ISI (Important Safety Information)",
+          "id": "isi",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block",
+                "template": {
+                  "name": "ISI",
+                  "filter": "isi"
+                }
+              }
+            }
+          }
+        },
+        {
+          "title": "ISI Section",
+          "id": "isi-section",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block/item",
+                "template": {
+                  "name": "ISI Section",
+                  "model": "isi-section"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "title": "Navigation",
+      "id": "navigation",
+      "components": [
+        {
+          "title": "Navigation",
+          "id": "navigation",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block",
+                "template": {
+                  "name": "Navigation",
+                  "model": "navigation",
+                  "filter": "navigation"
+                }
+              }
+            }
+          }
+        },
+        {
+          "title": "Nav Item",
+          "id": "nav-item",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block/item",
+                "template": {
+                  "name": "Nav Item",
+                  "model": "nav-item"
+                }
+              }
+            }
+          }
+        },
+        {
+          "title": "Utility Nav Item",
+          "id": "utility-nav",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block/item",
+                "template": {
+                  "name": "Utility Nav",
+                  "model": "utility-nav"
+                }
+              }
+            }
+          }
         }
       ]
     }
