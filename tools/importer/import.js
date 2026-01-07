@@ -1,6 +1,9 @@
 /*
  * Venclexta Pharma Site Import Script
  * Converts SSWeaver pharmaceutical presentations to AEM Edge Delivery Services
+ *
+ * Hero model fields: image, imageAlt, text
+ * Block table structure must match model columns
  */
 
 const VIEW_CONTENT = {
@@ -61,15 +64,12 @@ function createBlock(doc, name, rows) {
 }
 
 /**
- * Main transform - MUST export as object with transform method
- * Function receives destructured { document, url, html, params }
- * Returns ARRAY of { element, path } objects
+ * Main transform - exports as object with transform method
  */
 export default {
   transform: ({ document, url, html, params }) => {
     // eslint-disable-next-line no-console
     console.log('[VENCLEXTA IMPORT] Transform called with URL:', url);
-    console.log('[VENCLEXTA IMPORT] Original URL:', params?.originalURL);
 
     // Get the slide image before clearing
     const slideImg = document.querySelector('.ssweaverSlide img.slide');
@@ -83,59 +83,66 @@ export default {
     body.innerHTML = '';
 
     // --- HERO BLOCK ---
+    // Model: image (reference), imageAlt (text), text (richtext)
+    // Table structure:
+    // | Hero |
+    // | image | imageAlt |
+    // | text |
+
     const heroRows = [];
 
-    // Row 1: Hero image
-    if (imgSrc) {
-      const img = document.createElement('img');
-      img.src = imgSrc;
-      img.alt = 'AML Hero Banner';
-      heroRows.push([img]);
-    }
+    // Row 1: image | imageAlt (2 columns matching model)
+    const img = document.createElement('img');
+    img.src = imgSrc || '/content/dam/venclexta/aml-home.png';
+    img.alt = 'AML Hero Banner';
+    heroRows.push([img, 'AML Hero Banner']);
 
-    // Row 2: Text content
-    const textDiv = document.createElement('div');
+    // Row 2: text (richtext content - single cell)
+    const textContent = document.createElement('div');
 
-    const p1 = document.createElement('p');
-    const strong1 = document.createElement('strong');
-    strong1.textContent = VIEW_CONTENT.heroHeadline;
-    p1.appendChild(strong1);
-    textDiv.appendChild(p1);
+    // Headline as strong
+    const headline = document.createElement('p');
+    const headlineStrong = document.createElement('strong');
+    headlineStrong.textContent = VIEW_CONTENT.heroHeadline;
+    headline.appendChild(headlineStrong);
+    textContent.appendChild(headline);
 
-    const h1 = document.createElement('h1');
-    h1.textContent = VIEW_CONTENT.heroSubhead;
-    textDiv.appendChild(h1);
+    // Subhead as h1
+    const subhead = document.createElement('h1');
+    subhead.textContent = VIEW_CONTENT.heroSubhead;
+    textContent.appendChild(subhead);
 
+    // Stats paragraphs
     VIEW_CONTENT.heroStats.split('\n\n').forEach((line) => {
       const p = document.createElement('p');
       p.textContent = line;
-      textDiv.appendChild(p);
+      textContent.appendChild(p);
     });
 
+    // Description
     const descP = document.createElement('p');
     descP.textContent = VIEW_CONTENT.heroDescription;
-    textDiv.appendChild(descP);
+    textContent.appendChild(descP);
 
-    heroRows.push([textDiv]);
-
-    // Row 3: Buttons
-    const btnDiv = document.createElement('div');
+    // CTA buttons as paragraph with links
     VIEW_CONTENT.buttons.forEach((btn) => {
       const p = document.createElement('p');
       const a = document.createElement('a');
       a.href = btn.link;
       a.textContent = btn.label;
       p.appendChild(a);
-      btnDiv.appendChild(p);
+      textContent.appendChild(p);
     });
-    heroRows.push([btnDiv]);
+
+    // Single cell for text field (will span)
+    heroRows.push([textContent]);
 
     body.appendChild(createBlock(document, 'Hero', heroRows));
 
     // --- SECTION BREAK ---
     body.appendChild(document.createElement('hr'));
 
-    // --- ISI CONTENT ---
+    // --- ISI CONTENT (as default content) ---
     ISI_SECTIONS.forEach((section) => {
       const titleP = document.createElement('p');
       const titleStrong = document.createElement('strong');
@@ -150,14 +157,12 @@ export default {
 
     // PI link
     const piP = document.createElement('p');
-    const piText1 = document.createTextNode('Please see accompanying full ');
+    piP.appendChild(document.createTextNode('Please see accompanying full '));
     const piLink = document.createElement('a');
     piLink.href = 'https://www.rxabbvie.com/pdf/venclexta.pdf';
     piLink.textContent = 'Prescribing Information';
-    const piText2 = document.createTextNode('.');
-    piP.appendChild(piText1);
     piP.appendChild(piLink);
-    piP.appendChild(piText2);
+    piP.appendChild(document.createTextNode('.'));
     body.appendChild(piP);
 
     // Trademark
@@ -174,7 +179,7 @@ export default {
       ['description', 'Clinical efficacy and safety information for newly diagnosed AML patients'],
     ]));
 
-    // MUST return ARRAY of { element, path }
+    // Return array of { element, path }
     return [{
       element: body,
       path: '/venclexta/aml-home',
