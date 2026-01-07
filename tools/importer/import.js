@@ -83,21 +83,20 @@ export default {
     body.innerHTML = '';
 
     // --- HERO BLOCK ---
-    // Model: image (reference), imageAlt (text), text (richtext)
-    // Table structure:
+    // Model has 3 fields: image (reference), imageAlt (text), text (richtext)
+    // Table structure must be ONE ROW with 3 COLUMNS:
     // | Hero |
-    // | image | imageAlt |
-    // | text |
+    // | image | imageAlt | text |
 
-    const heroRows = [];
-
-    // Row 1: image | imageAlt (2 columns matching model)
+    // Column 1: image
     const img = document.createElement('img');
     img.src = imgSrc || '/content/dam/venclexta/aml-home.png';
     img.alt = 'AML Hero Banner';
-    heroRows.push([img, 'AML Hero Banner']);
 
-    // Row 2: text (richtext content - single cell)
+    // Column 2: imageAlt (plain text)
+    const imageAlt = 'AML Hero Banner';
+
+    // Column 3: text (richtext content)
     const textContent = document.createElement('div');
 
     // Headline as strong
@@ -134,8 +133,8 @@ export default {
       textContent.appendChild(p);
     });
 
-    // Single cell for text field (will span)
-    heroRows.push([textContent]);
+    // Single row with 3 columns matching the 3 model fields
+    const heroRows = [[img, imageAlt, textContent]];
 
     body.appendChild(createBlock(document, 'Hero', heroRows));
 
