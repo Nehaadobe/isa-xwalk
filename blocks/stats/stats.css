@@ -1,0 +1,89 @@
+.stats {
+  padding: 24px;
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  border-radius: 8px;
+  margin: 16px 0;
+}
+
+.stats .stats-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+.stats .stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 16px 24px;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgb(0 0 0 / 10%);
+  min-width: 180px;
+}
+
+.stats .stat-item.treatment {
+  border-left: 4px solid #005eb8;
+}
+
+.stats .stat-item.comparator {
+  border-left: 4px solid #6c757d;
+}
+
+.stats .stat-label {
+  font-size: 14px;
+  font-weight: 700;
+  color: #333;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 8px;
+}
+
+.stats .stat-value {
+  font-size: 28px;
+  font-weight: 700;
+  color: #005eb8;
+  line-height: 1.2;
+}
+
+.stats .stat-item.comparator .stat-value {
+  color: #6c757d;
+}
+
+.stats .stat-ci {
+  font-size: 12px;
+  color: #666;
+  margin-top: 4px;
+}
+
+.stats .stat-vs {
+  font-size: 16px;
+  font-weight: 700;
+  color: #999;
+  text-transform: uppercase;
+}
+
+.stats .stat-hr {
+  width: 100%;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid #dee2e6;
+}
+
+@media (width <= 768px) {
+  .stats .stats-container {
+    flex-direction: column;
+  }
+
+  .stats .stat-item {
+    width: 100%;
+    max-width: 280px;
+  }
+}

@@ -5,33 +5,232 @@
 
 .hero {
   position: relative;
-  padding: 40px 24px;
-  min-height: 300px;
+  min-height: 700px;
+  display: flex;
+  align-items: flex-start;
+  overflow: hidden;
+  background: #f5f5f5;
+  margin-top: 64px;
 }
 
-.hero h1 {
-  max-width: 1200px;
-  margin-left: auto;
-  margin-right: auto;
-  color: var(--background-color);
-}
-
-.hero picture {
+/* Background image */
+.hero .hero-image {
   position: absolute;
-  z-index: -1;
   inset: 0;
-  object-fit: cover;
-  box-sizing: border-box;
+  z-index: 0;
 }
 
-.hero img {
-  object-fit: cover;
+.hero .hero-image picture,
+.hero .hero-image img {
   width: 100%;
   height: 100%;
+  object-fit: cover;
+  object-position: right center;
 }
 
-@media (width >= 900px) {
+/* Content overlay */
+.hero .hero-content {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 55%;
+  padding: 80px 40px 30px;
+  display: flex;
+  flex-direction: column;
+  min-height: 600px;
+}
+
+/* Text styling - matching original image */
+.hero .hero-text {
+  background: transparent;
+  padding: 24px 0;
+  margin-bottom: 20px;
+  max-width: 520px;
+  border-top: 3px solid #d4a853;
+  border-bottom: 3px solid #d4a853;
+}
+
+/* Headline styling */
+.hero .hero-text h1 {
+  font-size: 32px;
+  line-height: 1.1;
+  font-weight: 900;
+  color: #1a3a5c;
+  margin: 0 0 16px;
+  font-family: Arial, Helvetica, sans-serif;
+  text-transform: uppercase;
+}
+
+/* "VENCLEXTA + AZACITIDINE" - teal, smaller */
+.hero .hero-text h1 strong:first-of-type {
+  display: block;
+  color: #00a99d;
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  margin-bottom: 4px;
+  text-transform: uppercase;
+}
+
+/* "PATIENTS LIVE LONGER" - teal, large */
+.hero .hero-text h1 strong:last-of-type {
+  display: block;
+  font-size: 42px;
+  font-weight: 900;
+  line-height: 1.0;
+  margin-top: 4px;
+  color: #00a99d;
+  text-transform: uppercase;
+}
+
+.hero .hero-text p {
+  font-size: 11px;
+  line-height: 1.4;
+  margin: 0 0 3px;
+  color: #333;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.hero .hero-text p:first-of-type {
+  font-size: 12px;
+  font-weight: 700;
+  margin-top: 14px;
+  margin-bottom: 6px;
+  color: #333;
+}
+
+.hero .hero-text p strong {
+  color: #00a99d;
+  font-weight: 700;
+  font-size: 13px;
+}
+
+/* Stats row styling */
+.hero .hero-text p:nth-of-type(2) {
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.hero .hero-text p:nth-of-type(3),
+.hero .hero-text p:nth-of-type(4) {
+  font-size: 10px;
+  color: #555;
+}
+
+/* CTA Buttons */
+.hero .hero-ctas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: auto;
+  padding-top: 20px;
+  position: absolute;
+  bottom: 80px;
+  left: 40px;
+  right: 40px;
+  max-width: 1000px;
+}
+
+.hero .hero-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 12px 16px;
+  background: #fff;
+  color: #333;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.hero .hero-btn:hover {
+  background: #f8f8f8;
+  border-color: #00a99d;
+}
+
+.hero .hero-btn::after {
+  content: '\2192';
+  font-size: 12px;
+  background: #00a99d;
+  color: #fff;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+/* Primary buttons (first 2) - dark teal filled */
+.hero .hero-btn:nth-child(1),
+.hero .hero-btn:nth-child(2) {
+  background: #006272;
+  color: #fff;
+  border-color: #006272;
+  border-radius: 6px;
+}
+
+.hero .hero-btn:nth-child(1):hover,
+.hero .hero-btn:nth-child(2):hover {
+  background: #005262;
+  border-color: #005262;
+}
+
+.hero .hero-btn:nth-child(1)::after,
+.hero .hero-btn:nth-child(2)::after {
+  background: #00b5ad;
+  color: #fff;
+  content: '+';
+  font-size: 16px;
+  font-weight: 300;
+}
+
+/* First row - 2 teal buttons take 50% width each */
+.hero .hero-btn:nth-child(1),
+.hero .hero-btn:nth-child(2) {
+  flex: 0 0 calc(50% - 4px);
+}
+
+/* Second row - 4 white buttons take 25% width each */
+.hero .hero-btn:nth-child(n+3) {
+  flex: 0 0 calc(25% - 6px);
+}
+
+/* Responsive */
+@media (width >= 1000px) {
+  .hero .hero-ctas {
+    bottom: 60px;
+  }
+}
+
+@media (width <= 900px) {
+  /* On smaller screens, 2 buttons per row */
+  .hero .hero-btn:nth-child(1),
+  .hero .hero-btn:nth-child(2) {
+    flex: 0 0 calc(50% - 4px);
+  }
+
+  .hero .hero-btn:nth-child(n+3) {
+    flex: 0 0 calc(50% - 4px);
+  }
+}
+
+@media (width <= 768px) {
   .hero {
-    padding: 40px 32px;
+    min-height: 400px;
+  }
+
+  .hero .hero-ctas {
+    position: relative;
+    bottom: auto;
+    left: auto;
+    right: auto;
+    padding: 20px;
   }
 }

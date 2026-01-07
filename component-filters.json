@@ -15,7 +15,10 @@
       "hero",
       "cards",
       "columns",
-      "fragment"
+      "fragment",
+      "stats",
+      "tabs",
+      "isi"
     ]
   },
   {
@@ -37,6 +40,31 @@
       "image",
       "button",
       "title"
+    ]
+  },
+  {
+    "id": "stats",
+    "components": [
+      "stat-item"
+    ]
+  },
+  {
+    "id": "tabs",
+    "components": [
+      "tab"
+    ]
+  },
+  {
+    "id": "isi",
+    "components": [
+      "isi-section"
+    ]
+  },
+  {
+    "id": "navigation",
+    "components": [
+      "nav-item",
+      "utility-nav"
     ]
   }
 ]
