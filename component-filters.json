@@ -18,7 +18,13 @@
       "fragment",
       "stats",
       "tabs",
-      "isi"
+      "isi",
+      "ski-isa-hero",
+      "ski-isa-coverage",
+      "ski-isa-support",
+      "ski-isa-safety",
+      "ski-isa-indications",
+      "ski-isa-nav"
     ]
   },
   {
@@ -65,6 +71,30 @@
     "components": [
       "nav-item",
       "utility-nav"
+    ]
+  },
+  {
+    "id": "ski-isa-support",
+    "components": [
+      "ski-isa-support-card"
+    ]
+  },
+  {
+    "id": "ski-isa-safety",
+    "components": [
+      "ski-isa-safety-section"
+    ]
+  },
+  {
+    "id": "ski-isa-indications",
+    "components": [
+      "ski-isa-indication-item"
+    ]
+  },
+  {
+    "id": "ski-isa-nav",
+    "components": [
+      "ski-isa-nav-item"
     ]
   }
 ]

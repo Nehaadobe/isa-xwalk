@@ -19,6 +19,17 @@
   --link-color: #3b63fb;
   --link-hover-color: #1d3ecf;
 
+  /* SKYRIZI Brand Colors */
+  --ski-teal: #10a4de;
+  --ski-teal-dark: #0d8ec2;
+  --ski-blue-dark: #002d72;
+  --ski-blue: #003087;
+  --ski-orange: #f47920;
+  --ski-gray-dark: #333333;
+  --ski-gray: #666666;
+  --ski-gray-light: #f5f5f5;
+  --ski-white: #ffffff;
+
   /* fonts */
   --body-font-family: roboto, roboto-fallback, sans-serif;
   --heading-font-family: roboto-condensed, roboto-condensed-fallback, sans-serif;
@@ -302,4 +313,13 @@ main > .section > div > p:last-of-type {
   font-size: 11px;
   color: #333;
   margin-top: 16px;
+}
+
+/* SKYRIZI Access Page Background */
+body:has(.ski-isa-hero) {
+  background-image: url('/content/skyrizi/images/OpenSky.png');
+  background-repeat: no-repeat;
+  background-position: center top;
+  background-size: cover;
+  background-attachment: fixed;
 }

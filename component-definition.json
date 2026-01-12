@@ -300,6 +300,165 @@
           }
         }
       ]
+    },
+    {
+      "title": "SKYRIZI ISA Blocks",
+      "id": "ski-isa-blocks",
+      "components": [
+        {
+          "title": "SKI ISA Hero",
+          "id": "ski-isa-hero",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block",
+                "template": {
+                  "name": "Ski Isa Hero",
+                  "model": "ski-isa-hero"
+                }
+              }
+            }
+          }
+        },
+        {
+          "title": "SKI ISA Coverage",
+          "id": "ski-isa-coverage",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block",
+                "template": {
+                  "name": "Ski Isa Coverage",
+                  "model": "ski-isa-coverage"
+                }
+              }
+            }
+          }
+        },
+        {
+          "title": "SKI ISA Support",
+          "id": "ski-isa-support",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block",
+                "template": {
+                  "name": "Ski Isa Support",
+                  "model": "ski-isa-support",
+                  "filter": "ski-isa-support"
+                }
+              }
+            }
+          }
+        },
+        {
+          "title": "SKI ISA Support Card",
+          "id": "ski-isa-support-card",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block/item",
+                "template": {
+                  "name": "Ski Isa Support Card",
+                  "model": "ski-isa-support-card"
+                }
+              }
+            }
+          }
+        },
+        {
+          "title": "SKI ISA Safety",
+          "id": "ski-isa-safety",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block",
+                "template": {
+                  "name": "Ski Isa Safety",
+                  "model": "ski-isa-safety",
+                  "filter": "ski-isa-safety"
+                }
+              }
+            }
+          }
+        },
+        {
+          "title": "SKI ISA Safety Section",
+          "id": "ski-isa-safety-section",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block/item",
+                "template": {
+                  "name": "Ski Isa Safety Section",
+                  "model": "ski-isa-safety-section"
+                }
+              }
+            }
+          }
+        },
+        {
+          "title": "SKI ISA Indications",
+          "id": "ski-isa-indications",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block",
+                "template": {
+                  "name": "Ski Isa Indications",
+                  "model": "ski-isa-indications",
+                  "filter": "ski-isa-indications"
+                }
+              }
+            }
+          }
+        },
+        {
+          "title": "SKI ISA Indication Item",
+          "id": "ski-isa-indication-item",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block/item",
+                "template": {
+                  "name": "Ski Isa Indication Item",
+                  "model": "ski-isa-indication-item"
+                }
+              }
+            }
+          }
+        },
+        {
+          "title": "SKI ISA Navigation",
+          "id": "ski-isa-nav",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block",
+                "template": {
+                  "name": "Ski Isa Nav",
+                  "filter": "ski-isa-nav"
+                }
+              }
+            }
+          }
+        },
+        {
+          "title": "SKI ISA Nav Item",
+          "id": "ski-isa-nav-item",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block/item",
+                "template": {
+                  "name": "Ski Isa Nav Item",
+                  "model": "ski-isa-nav-item"
+                }
+              }
+            }
+          }
+        }
+      ]
     }
   ]
 }

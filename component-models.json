@@ -383,5 +383,255 @@
         ]
       }
     ]
+  },
+  {
+    "id": "ski-isa-hero",
+    "fields": [
+      {
+        "component": "reference",
+        "valueType": "string",
+        "name": "logo",
+        "label": "Logo Image",
+        "description": "SKYRIZI brand logo",
+        "multi": false
+      },
+      {
+        "component": "richtext",
+        "valueType": "string",
+        "name": "headline",
+        "label": "Headline",
+        "description": "Main hero headline with safety information title"
+      },
+      {
+        "component": "richtext",
+        "valueType": "string",
+        "name": "subtitle",
+        "label": "Subtitle",
+        "description": "Optional subtitle or description"
+      }
+    ]
+  },
+  {
+    "id": "ski-isa-coverage",
+    "fields": [
+      {
+        "component": "richtext",
+        "valueType": "string",
+        "name": "title",
+        "label": "Title",
+        "description": "Main headline for coverage section"
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "commercialLabel",
+        "label": "Commercial Label",
+        "value": "Commercial"
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "commercialPercentage",
+        "label": "Commercial Percentage",
+        "description": "e.g., 99%"
+      },
+      {
+        "component": "richtext",
+        "valueType": "string",
+        "name": "commercialDescription",
+        "label": "Commercial Description"
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "medicareLabel",
+        "label": "Medicare Label",
+        "value": "Medicare Part D"
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "medicarePercentage",
+        "label": "Medicare Percentage",
+        "description": "e.g., 97%"
+      },
+      {
+        "component": "richtext",
+        "valueType": "string",
+        "name": "medicareDescription",
+        "label": "Medicare Description"
+      },
+      {
+        "component": "richtext",
+        "valueType": "string",
+        "name": "benefits",
+        "label": "Benefits List",
+        "description": "List of coverage benefits"
+      },
+      {
+        "component": "richtext",
+        "valueType": "string",
+        "name": "footnote",
+        "label": "Footnote",
+        "description": "Disclaimer text"
+      }
+    ]
+  },
+  {
+    "id": "ski-isa-support",
+    "fields": [
+      {
+        "component": "richtext",
+        "valueType": "string",
+        "name": "title",
+        "label": "Title",
+        "description": "Section title"
+      },
+      {
+        "component": "richtext",
+        "valueType": "string",
+        "name": "ctaText",
+        "label": "CTA Text",
+        "description": "Call to action button text"
+      },
+      {
+        "component": "aem-content",
+        "name": "ctaLink",
+        "label": "CTA Link"
+      },
+      {
+        "component": "richtext",
+        "valueType": "string",
+        "name": "footnotes",
+        "label": "Footnotes",
+        "description": "Legal footnotes and disclaimers"
+      }
+    ]
+  },
+  {
+    "id": "ski-isa-support-card",
+    "fields": [
+      {
+        "component": "reference",
+        "valueType": "string",
+        "name": "icon",
+        "label": "Icon",
+        "description": "Card icon image",
+        "multi": false
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "title",
+        "label": "Card Title",
+        "description": "e.g., AFFORDABILITY"
+      },
+      {
+        "component": "richtext",
+        "valueType": "string",
+        "name": "description",
+        "label": "Description",
+        "description": "Card description text"
+      }
+    ]
+  },
+  {
+    "id": "ski-isa-safety",
+    "fields": [
+      {
+        "component": "richtext",
+        "valueType": "string",
+        "name": "title",
+        "label": "Title",
+        "description": "Safety section main title"
+      }
+    ]
+  },
+  {
+    "id": "ski-isa-safety-section",
+    "fields": [
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "title",
+        "label": "Section Title",
+        "description": "e.g., Hypersensitivity Reactions, Infection"
+      },
+      {
+        "component": "richtext",
+        "valueType": "string",
+        "name": "content",
+        "label": "Section Content",
+        "description": "Safety information content"
+      }
+    ]
+  },
+  {
+    "id": "ski-isa-indications",
+    "fields": [
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "title",
+        "label": "Title",
+        "value": "Indications"
+      },
+      {
+        "component": "richtext",
+        "valueType": "string",
+        "name": "piLink",
+        "label": "PI Link Text",
+        "description": "Prescribing Information link text"
+      },
+      {
+        "component": "aem-content",
+        "name": "piUrl",
+        "label": "PI Link URL",
+        "description": "URL to Full Prescribing Information PDF"
+      }
+    ]
+  },
+  {
+    "id": "ski-isa-indication-item",
+    "fields": [
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "condition",
+        "label": "Condition",
+        "description": "e.g., Plaque Psoriasis, Psoriatic Arthritis"
+      },
+      {
+        "component": "richtext",
+        "valueType": "string",
+        "name": "description",
+        "label": "Description",
+        "description": "Indication description text"
+      }
+    ]
+  },
+  {
+    "id": "ski-isa-nav-item",
+    "fields": [
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "label",
+        "label": "Label",
+        "description": "Navigation item label (e.g., OVERVIEW, DOSING)"
+      },
+      {
+        "component": "aem-content",
+        "name": "link",
+        "label": "Link",
+        "description": "Navigation item URL"
+      },
+      {
+        "component": "boolean",
+        "name": "isActive",
+        "label": "Active",
+        "description": "Mark as current/active page"
+      }
+    ]
   }
 ]

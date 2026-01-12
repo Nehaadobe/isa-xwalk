@@ -1,0 +1,273 @@
+/* SKI ISA Hero Block Styles - SKYRIZI Brand */
+
+.ski-isa-hero {
+  background: var(--ski-blue-dark, #002d72);
+  padding: 0;
+  color: var(--ski-white, #fff);
+}
+
+/* Top Bar with ISI Toggle - Dark Blue */
+.ski-isa-hero-topbar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: #193052;
+  padding: 0.5rem 1rem;
+  font-size: 0.65rem;
+  text-align: center;
+  line-height: 1.4;
+}
+
+.ski-isa-hero-topbar .topbar-line {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem;
+  padding: 0.15rem 0;
+}
+
+.ski-isa-hero-topbar .topbar-text {
+  color: #fff;
+  font-weight: 400;
+}
+
+.ski-isa-hero-topbar .topbar-toggle {
+  display: inline;
+  background: transparent;
+  border: none;
+  color: #fff;
+  font-size: 0.65rem;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: underline;
+  padding: 0;
+}
+
+.ski-isa-hero-topbar .topbar-toggle:hover {
+  opacity: 0.9;
+}
+
+.ski-isa-hero-topbar .topbar-link {
+  color: #fff;
+  text-decoration: underline;
+  font-weight: 400;
+}
+
+.ski-isa-hero-topbar .topbar-link:hover {
+  opacity: 0.9;
+}
+
+/* Collapsible Safety Info Panel */
+.ski-isa-hero-safety-info {
+  background: #fff;
+  position: relative;
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+}
+
+.ski-isa-hero-safety-info.collapsed .safety-info-content {
+  display: none;
+}
+
+.safety-info-toggle {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 40px;
+  height: 40px;
+  background: #10a4de;
+  border: none;
+  color: #fff;
+  font-size: 1.5rem;
+  font-weight: 300;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+}
+
+.safety-info-toggle:hover {
+  background: #0d8ec2;
+}
+
+.safety-info-content {
+  padding: 1rem 1rem 1rem 3rem;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.safety-info-title {
+  color: #10a4de;
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin: 0 0 1rem 0;
+}
+
+.safety-info-title sup {
+  font-size: 0.6rem;
+  font-weight: 700;
+  background: #10a4de;
+  color: #fff;
+  border-radius: 50%;
+  padding: 0.2em 0.45em;
+  margin-left: 0.25rem;
+  vertical-align: super;
+}
+
+.safety-info-skyrizi,
+.safety-info-humira {
+  margin-bottom: 1rem;
+}
+
+.safety-info-content h2 {
+  color: #10a4de;
+  font-size: 0.85rem;
+  font-weight: 700;
+  margin: 0.75rem 0 0.25rem;
+}
+
+.safety-info-content p {
+  font-size: 0.8rem;
+  color: #333;
+  line-height: 1.5;
+  margin: 0 0 0.5rem;
+}
+
+.safety-info-content .blue {
+  color: #10a4de;
+}
+
+.ski-isa-hero-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1rem;
+  max-width: 100%;
+}
+
+.ski-isa-hero-logo {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.ski-isa-hero-logo img {
+  height: 36px;
+  width: auto;
+  filter: brightness(0) invert(1);
+}
+
+.ski-isa-hero-logo .brand-subtitle {
+  font-size: 0.65rem;
+  color: rgba(255, 255, 255, 0.85);
+  margin-top: 2px;
+  letter-spacing: 0.5px;
+}
+
+.ski-isa-hero-content {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.ski-isa-hero-headline {
+  display: none;
+}
+
+.ski-isa-hero-subtitle {
+  display: none;
+}
+
+/* Navigation Icons */
+.ski-isa-hero-nav {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.ski-isa-hero-nav-icon {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--ski-white, #fff);
+  cursor: pointer;
+  transition: opacity 0.2s;
+  border: none;
+  background: transparent;
+  position: relative;
+}
+
+.ski-isa-hero-nav-icon:hover {
+  opacity: 0.8;
+}
+
+.ski-isa-hero-nav-icon.home-icon svg {
+  width: 28px;
+  height: 28px;
+}
+
+.ski-isa-hero-nav-icon.all-icon svg {
+  width: 24px;
+  height: 24px;
+}
+
+.ski-isa-hero-nav-icon.segment-menu {
+  flex-direction: column;
+  gap: 2px;
+  width: auto;
+  padding: 0 0.5rem;
+}
+
+.ski-isa-hero-nav-icon.segment-menu svg {
+  width: 20px;
+  height: 20px;
+}
+
+.ski-isa-hero-nav-icon .segment-label {
+  font-size: 0.6rem;
+  font-weight: 600;
+  color: #fff;
+  background: rgba(255, 255, 255, 0.2);
+  padding: 0.1rem 0.3rem;
+  border-radius: 2px;
+}
+
+/* ISI Toggle Button */
+.ski-isa-hero .isi-toggle-btn {
+  background: var(--ski-teal, #10a4de);
+  border: none;
+  border-radius: 50%;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--ski-white, #fff);
+  font-size: 1.25rem;
+  font-weight: 300;
+  line-height: 1;
+}
+
+.ski-isa-hero .isi-toggle-btn:hover {
+  background: var(--ski-teal-dark, #0d8ec2);
+}
+
+@media (min-width: 768px) {
+  .ski-isa-hero-wrapper {
+    padding: 0.75rem 1.5rem;
+  }
+
+  .ski-isa-hero-logo img {
+    height: 44px;
+  }
+
+  .ski-isa-hero-logo .brand-subtitle {
+    font-size: 0.7rem;
+  }
+}
