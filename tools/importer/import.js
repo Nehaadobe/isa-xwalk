@@ -1,13 +1,6 @@
 /*
  * SKYRIZI Site Import Script for Helix AEM Importer
- * Converts SKYRIZI pharmaceutical pages to AEM Edge Delivery Services
- *
- * Supports pages:
- * - /access - Coverage and support information
- * - /h2h - Head-to-head comparison data
- * - /overview - Product overview
- * - /pasi-90-100 - PASI efficacy results
- * - /safety - Safety information
+ * Extracts content from live SKYRIZI pages and converts to AEM Edge Delivery Services
  */
 
 /**
@@ -15,6 +8,13 @@
  */
 function getText(el) {
   return el?.textContent?.trim() || '';
+}
+
+/**
+ * Helper: Get innerHTML from element
+ */
+function getHTML(el) {
+  return el?.innerHTML?.trim() || '';
 }
 
 /**
@@ -28,13 +28,13 @@ function createDivider(doc) {
  * Extract brand/logo info from page
  */
 function extractBrandInfo(document) {
-  const logo = document.querySelector('.brand-logo img, .logo img, [class*="logo"] img, header img');
-  const subtitle = document.querySelector('.brand-subtitle, [class*="subtitle"]');
+  // Look for SKYRIZI logo
+  const logo = document.querySelector('img[alt*="Skyrizi"], img[alt*="SKYRIZI"], .logo img, header img');
 
   return {
     name: 'SKYRIZI',
-    subtitle: getText(subtitle) || '(risankizumab-rzaa)',
-    logo: logo?.src || './images/logo-skyrizi.svg',
+    subtitle: '(risankizumab-rzaa)',
+    logo: logo?.src || '',
   };
 }
 
@@ -44,31 +44,49 @@ function extractBrandInfo(document) {
 function extractISILines(document) {
   const isiLines = [];
 
-  const isiToggles = document.querySelectorAll('[class*="isi-toggle"], [class*="tap-here"], .topbar-line, [class*="topbar"]');
+  // Look for ISI toggle text in the live site structure
+  const isiContainer = document.querySelector('[class*="isi"], [class*="topbar"], .safety-info');
 
-  isiToggles.forEach((toggle) => {
-    const toggleBtn = toggle.querySelector('button, .toggle, [class*="toggle"]');
-    const content = toggle.querySelector('.isi-content, .content, span:not(.toggle), p');
-    const link = toggle.querySelector('a');
+  if (isiContainer) {
+    // Extract SKYRIZI ISI line
+    const skyriziText = isiContainer.textContent;
+    if (skyriziText.includes('SKYRIZI')) {
+      const skyriziMatch = skyriziText.match(/Tap here.*?(?=Tap here|$)/i);
+      if (skyriziMatch) {
+        isiLines.push({
+          toggle: 'Tap here',
+          text: 'for SKYRIZI Indications and additional Important Safety Information.',
+          linkText: 'See Full Prescribing Information',
+          linkHref: 'https://www.rxabbvie.com/pdf/skyrizi_pi.pdf',
+        });
+      }
+    }
 
-    if (toggleBtn || content) {
+    // Extract HUMIRA ISI line if present
+    if (skyriziText.includes('HUMIRA')) {
       isiLines.push({
-        toggle: getText(toggleBtn) || 'Tap here',
-        text: getText(content) || '',
+        toggle: 'Tap here',
+        text: 'for HUMIRA Indications and Important Safety Information, including BOXED WARNING.',
+        linkText: 'See Full Prescribing Information',
+        linkHref: 'https://www.rxabbvie.com/pdf/humira.pdf',
+      });
+    }
+  }
+
+  // Extract from list items if structured that way
+  const listItems = document.querySelectorAll('li p, [class*="isi"] p');
+  listItems.forEach((item) => {
+    const text = getText(item);
+    if (text.includes('Tap here') && text.includes('SKYRIZI')) {
+      const link = item.querySelector('a');
+      isiLines.push({
+        toggle: 'Tap here',
+        text: text.replace('Tap here', '').replace(getText(link), '').trim(),
         linkText: getText(link) || 'See Full Prescribing Information',
-        linkHref: link?.href || '',
+        linkHref: link?.href || 'https://www.rxabbvie.com/pdf/skyrizi_pi.pdf',
       });
     }
   });
-
-  if (isiLines.length === 0) {
-    isiLines.push({
-      toggle: 'Tap here',
-      text: 'for SKYRIZI Indications and additional Important Safety Information.',
-      linkText: 'See Full Prescribing Information',
-      linkHref: 'https://www.rxabbvie.com/pdf/skyrizi_pi.pdf',
-    });
-  }
 
   return isiLines;
 }
@@ -79,23 +97,53 @@ function extractISILines(document) {
 function extractIndications(document) {
   const indications = [];
 
-  const indicationEls = document.querySelectorAll('[class*="indication"], .indication-item, [class*="condition"]');
+  // Look for indication sections in the ISI modal or main content
+  const indicationSections = document.querySelectorAll('[class*="indication"], h3 + p, dt + dd');
 
-  indicationEls.forEach((el) => {
-    const condition = getText(el.querySelector('h3, h4, .condition-name, strong, dt'));
-    const description = getText(el.querySelector('p, .description, dd'));
+  // Try to find structured indication content
+  const psoriasisEl = document.querySelector('h3:contains("Plaque Psoriasis"), [class*="plaque"]');
+  const psoriaticEl = document.querySelector('h3:contains("Psoriatic Arthritis"), [class*="psoriatic"]');
+  const crohnEl = document.querySelector('h3:contains("Crohn"), [class*="crohn"]');
 
-    if (condition || description) {
-      indications.push({ condition: condition || '', description: description || '' });
+  // Extract from heading + paragraph pairs
+  const headings = document.querySelectorAll('h3');
+  headings.forEach((h3) => {
+    const headingText = getText(h3);
+    const nextP = h3.nextElementSibling;
+
+    if (headingText.includes('Plaque Psoriasis') && nextP) {
+      indications.push({
+        condition: 'Plaque Psoriasis:',
+        description: getText(nextP),
+      });
+    } else if (headingText.includes('Psoriatic Arthritis') && nextP) {
+      indications.push({
+        condition: 'Psoriatic Arthritis:',
+        description: getText(nextP),
+      });
+    } else if (headingText.includes('Crohn') && nextP) {
+      indications.push({
+        condition: "Crohn's Disease:",
+        description: getText(nextP),
+      });
     }
   });
 
+  // Alternative: look for strong + text patterns
   if (indications.length === 0) {
-    indications.push(
-      { condition: 'Plaque Psoriasis:', description: 'SKYRIZI is indicated for the treatment of moderate to severe plaque psoriasis in adults who are candidates for systemic therapy or phototherapy.' },
-      { condition: 'Psoriatic Arthritis:', description: 'SKYRIZI is indicated for the treatment of active psoriatic arthritis in adults.' },
-      { condition: 'Crohn\'s Disease:', description: 'SKYRIZI is indicated for the treatment of moderately to severely active Crohn\'s disease in adults.' },
-    );
+    const strongEls = document.querySelectorAll('strong, b');
+    strongEls.forEach((strong) => {
+      const text = getText(strong);
+      const parent = strong.parentElement;
+      if (text.includes('Plaque Psoriasis') || text.includes('Psoriatic Arthritis') || text.includes('Crohn')) {
+        const fullText = getText(parent);
+        const description = fullText.replace(text, '').trim();
+        indications.push({
+          condition: text,
+          description: description,
+        });
+      }
+    });
   }
 
   return indications;
@@ -107,38 +155,102 @@ function extractIndications(document) {
 function extractCoverage(document) {
   const coverage = {
     title: '',
-    tabs: ['Overview', 'National', 'Local'],
+    tabs: [],
     stats: [],
     footnote: '',
   };
 
-  const titleEl = document.querySelector('[class*="coverage"] h2, [class*="coverage-title"], [class*="headline"]');
-  coverage.title = getText(titleEl) || 'for Ps & PsA SKYRIZI Patients: Preferred NATIONAL Coverage & Exceptional Support';
+  // Extract main headline
+  const headline = document.querySelector('h2[class*="headline"], h2, [class*="coverage"] h2');
+  if (headline) {
+    coverage.title = getText(headline);
+  }
 
-  const statEls = document.querySelectorAll('[class*="stat-card"], [class*="coverage-stat"], [class*="stat"]');
-  statEls.forEach((stat) => {
-    const label = getText(stat.querySelector('.label, h3, h4, [class*="label"]'));
-    const value = getText(stat.querySelector('.value, .percentage, [class*="number"], [class*="value"]'));
-    const description = getText(stat.querySelector('.description, [class*="desc"]'));
-
-    if (label || value) {
-      coverage.stats.push({
-        label: label || '',
-        value: value?.replace('%', '') || '',
-        description: description || 'PREFERRED COVERAGE<sup>2</sup>*†'
-      });
+  // Extract tabs
+  const tabEls = document.querySelectorAll('[class*="tab"], [role="tab"]');
+  tabEls.forEach((tab) => {
+    const text = getText(tab);
+    if (text && !coverage.tabs.includes(text)) {
+      coverage.tabs.push(text);
     }
   });
 
-  if (coverage.stats.length === 0) {
-    coverage.stats = [
-      { label: 'Commercial', value: '99', description: 'PREFERRED COVERAGE<sup>2</sup>*†' },
-      { label: 'Medicare Part D', value: '97', description: 'PREFERRED COVERAGE<sup>2</sup>*†' },
-    ];
+  // Extract coverage stats (99%, 97%)
+  // Look for percentage values with labels
+  const statContainers = document.querySelectorAll('[class*="stat"], [class*="coverage"]');
+  statContainers.forEach((container) => {
+    const text = container.textContent;
+
+    // Look for Commercial stat
+    if (text.includes('Commercial') || text.includes('commercial')) {
+      const percentMatch = text.match(/(\d{2,3})%?/);
+      if (percentMatch) {
+        coverage.stats.push({
+          label: 'Commercial',
+          value: percentMatch[1],
+          description: 'PREFERRED COVERAGE<sup>2</sup>*†',
+        });
+      }
+    }
+
+    // Look for Medicare stat
+    if (text.includes('Medicare') || text.includes('Part D')) {
+      const percentMatch = text.match(/(\d{2,3})%?/);
+      if (percentMatch && !coverage.stats.find(s => s.label.includes('Medicare'))) {
+        coverage.stats.push({
+          label: 'Medicare Part D',
+          value: percentMatch[1],
+          description: 'PREFERRED COVERAGE<sup>2</sup>*†',
+        });
+      }
+    }
+  });
+
+  // Alternative: look for h1 headings with percentages
+  const h1Els = document.querySelectorAll('h1');
+  h1Els.forEach((h1) => {
+    const text = getText(h1).toLowerCase();
+    const parent = h1.parentElement;
+    const siblingText = parent?.textContent || '';
+
+    if (text.includes('commercial') && !coverage.stats.find(s => s.label === 'Commercial')) {
+      const percentMatch = siblingText.match(/(\d{2,3})%?/);
+      if (percentMatch) {
+        coverage.stats.push({
+          label: 'Commercial',
+          value: percentMatch[1],
+          description: 'PREFERRED COVERAGE<sup>2</sup>*†',
+        });
+      }
+    }
+
+    if (text.includes('medicare') && !coverage.stats.find(s => s.label.includes('Medicare'))) {
+      const percentMatch = siblingText.match(/(\d{2,3})%?/);
+      if (percentMatch) {
+        coverage.stats.push({
+          label: 'Medicare Part D',
+          value: percentMatch[1],
+          description: 'PREFERRED COVERAGE<sup>2</sup>*†',
+        });
+      }
+    }
+  });
+
+  // Extract footnote/disclaimer
+  const footnoteEl = document.querySelector('[class*="footnote"], [class*="disclaimer"], .preferred-coverage');
+  if (footnoteEl) {
+    coverage.footnote = getText(footnoteEl);
   }
 
-  const footnoteEl = document.querySelector('[class*="footnote"], [class*="disclaimer"]');
-  coverage.footnote = getText(footnoteEl) || '**Preferred coverage means SKYRIZI is AVAILABLE:** With no advanced systemic failure required‡ At the lowest branded co-pay/coinsurance tier.';
+  // Extract "Preferred coverage means" text
+  const preferredEl = document.querySelector('h2:contains("Preferred"), [class*="preferred"]');
+  if (preferredEl) {
+    const list = preferredEl.parentElement?.querySelector('ul, ol');
+    if (list) {
+      const items = [...list.querySelectorAll('li')].map(li => getText(li));
+      coverage.footnote = `**Preferred coverage means SKYRIZI is AVAILABLE:** ${items.join(' ')}`;
+    }
+  }
 
   return coverage;
 }
@@ -148,42 +260,84 @@ function extractCoverage(document) {
  */
 function extractSupport(document) {
   const support = {
-    title: 'Encourage your patients to enroll in',
+    title: '',
     cards: [],
-    cta: { label: 'FIND OUT MORE', link: '/skyrizi-complete' },
+    cta: { label: '', link: '' },
     footnotes: '',
   };
 
-  const cardEls = document.querySelectorAll('[class*="support-card"], [class*="card"], [class*="benefit"]');
-  cardEls.forEach((card) => {
-    const title = getText(card.querySelector('h4, h5, .title, strong, [class*="title"]'));
-    const description = getText(card.querySelector('p, .description, [class*="desc"]'));
-    const icon = getText(card.querySelector('[class*="icon"]')) || card.querySelector('img')?.alt || '';
+  // Extract "Encourage your patients" title
+  const titleEl = document.querySelector('h2:contains("Encourage"), h2:contains("enroll")');
+  if (titleEl) {
+    support.title = getText(titleEl);
+  } else {
+    // Look for any h2 near support content
+    const h2Els = document.querySelectorAll('h2');
+    h2Els.forEach((h2) => {
+      if (getText(h2).toLowerCase().includes('encourage') || getText(h2).toLowerCase().includes('enroll')) {
+        support.title = getText(h2);
+      }
+    });
+  }
 
-    if (title || description) {
+  // Extract support cards (Affordability, One-to-One, Bridge)
+  const cardHeadings = document.querySelectorAll('h5, h4');
+  cardHeadings.forEach((heading) => {
+    const text = getText(heading).toUpperCase();
+    const parent = heading.parentElement;
+    const description = parent?.querySelector('p');
+
+    if (text.includes('AFFORDABILITY')) {
       support.cards.push({
-        icon: icon || '$5',
-        title: title?.toUpperCase() || '',
-        description: description || ''
+        icon: '$5',
+        title: 'AFFORDABILITY',
+        description: getText(description) || '',
+      });
+    } else if (text.includes('ONE-TO-ONE') || text.includes('SUPPORT')) {
+      support.cards.push({
+        icon: 'support',
+        title: 'ONE-TO-ONE SUPPORT',
+        description: getText(description) || '',
+      });
+    } else if (text.includes('BRIDGE')) {
+      support.cards.push({
+        icon: 'bridge',
+        title: 'BRIDGE PROGRAM ELIGIBILITY',
+        description: getText(description) || '',
       });
     }
   });
 
-  if (support.cards.length === 0) {
-    support.cards = [
-      { icon: '$5', title: 'AFFORDABILITY', description: 'Eligible commercially insured patients may pay as little as $5 per quarterly dose§' },
-      { icon: 'support', title: 'ONE-TO-ONE SUPPORT', description: 'Insurance Specialists to help navigate insurance and Nurse Ambassadors∥ to help patients start and stay on therapy' },
-      { icon: 'bridge', title: 'BRIDGE PROGRAM ELIGIBILITY', description: 'No-cost product available for eligible patients in the event of a denial in coverage due to step-therapy requirement¶' },
-    ];
-  }
-
-  const ctaEl = document.querySelector('[class*="cta"] a, a[class*="btn"], .button');
+  // Extract CTA button
+  const ctaEl = document.querySelector('a:contains("FIND OUT"), button:contains("FIND OUT"), [class*="cta"]');
   if (ctaEl) {
-    support.cta = { label: getText(ctaEl) || 'FIND OUT MORE', link: ctaEl.href || '/skyrizi-complete' };
+    support.cta = {
+      label: getText(ctaEl),
+      link: ctaEl.href || '/skyrizi-complete',
+    };
+  } else {
+    // Look for any button/link with "find out more"
+    const links = document.querySelectorAll('a, button');
+    links.forEach((link) => {
+      if (getText(link).toLowerCase().includes('find out')) {
+        support.cta = {
+          label: getText(link),
+          link: link.href || '/skyrizi-complete',
+        };
+      }
+    });
   }
 
-  const footnotesEl = document.querySelector('[class*="footnote"], footer [class*="disclaimer"]');
-  support.footnotes = getText(footnotesEl) || '‡Advanced systemics inclusive of PDE4 inhibitors, JAK inhibitors, or biologics.';
+  // Extract footnotes
+  const footnoteEls = document.querySelectorAll('[class*="footnote"] p, sup + span');
+  const footnotes = [];
+  footnoteEls.forEach((el) => {
+    const text = getText(el);
+    if (text.length > 20) {
+      footnotes.push(text);
+    }
+  });
+  support.footnotes = footnotes.join(' ');
 
   return support;
 }
@@ -194,29 +348,37 @@ function extractSupport(document) {
 function extractNavigation(document) {
   const navItems = [];
 
-  const navEls = document.querySelectorAll('nav a, [class*="nav"] a, .navigation a, [class*="menu"] a');
+  // Look for bottom navigation
+  const navContainer = document.querySelector('[class*="nav"], nav, footer');
+  if (navContainer) {
+    const navEls = navContainer.querySelectorAll('a, [role="link"], [class*="nav-item"]');
+    navEls.forEach((el) => {
+      const label = getText(el);
+      const href = el.href || el.getAttribute('data-href') || '';
 
-  navEls.forEach((link) => {
-    const label = getText(link);
-    const href = link.getAttribute('href');
-
-    if (label && href && !href.startsWith('#')) {
-      navItems.push({
-        label: label.toUpperCase(),
-        link: href
-      });
-    }
-  });
-
-  if (navItems.length === 0) {
-    navItems.push(
-      { label: 'OVERVIEW', link: '/content/skyrizi/overview' },
-      { label: 'H2H', link: '/content/skyrizi/h2h' },
-      { label: 'PASI 90-100', link: '/content/skyrizi/pasi-90-100' },
-      { label: 'SAFETY', link: '/content/skyrizi/safety' },
-      { label: 'ACCESS', link: '/content/skyrizi/access' },
-    );
+      if (label && label.length < 30 && !href.includes('pdf')) {
+        navItems.push({
+          label: label.toUpperCase(),
+          link: href || `/${label.toLowerCase().replace(/\s+/g, '-')}`,
+        });
+      }
+    });
   }
+
+  // Alternative: look for specific nav text
+  const navTexts = ['OVERVIEW', 'H2H', 'PASI', 'SAFETY', 'ACCESS', 'DOSING', 'SUMMARY'];
+  const allEls = document.querySelectorAll('*');
+  allEls.forEach((el) => {
+    const text = getText(el).toUpperCase();
+    navTexts.forEach((navText) => {
+      if (text === navText && !navItems.find(n => n.label === navText)) {
+        navItems.push({
+          label: navText,
+          link: `/content/skyrizi/${navText.toLowerCase().replace(/\s+/g, '-')}`,
+        });
+      }
+    });
+  });
 
   return navItems;
 }
@@ -227,24 +389,22 @@ function extractNavigation(document) {
 function extractSafetyInfo(document) {
   const sections = [];
 
-  const safetyEls = document.querySelectorAll('[class*="safety-section"], [class*="warning"], [class*="precaution"]');
+  // Look for safety sections in ISI modal
+  const safetyHeadings = document.querySelectorAll('h2, h3');
+  safetyHeadings.forEach((heading) => {
+    const text = getText(heading);
+    const nextEl = heading.nextElementSibling;
 
-  safetyEls.forEach((el) => {
-    const heading = getText(el.querySelector('h2, h3, h4, strong'));
-    const content = getText(el.querySelector('p, .content'));
-
-    if (heading || content) {
-      sections.push({ heading: heading || '', content: content || '' });
+    if (text.includes('Hypersensitivity') || text.includes('Infection') ||
+        text.includes('Tuberculosis') || text.includes('Hepatotoxicity') ||
+        text.includes('Vaccines') || text.includes('Adverse') ||
+        text.includes('CONTRAINDICATIONS')) {
+      sections.push({
+        heading: text,
+        content: getText(nextEl) || '',
+      });
     }
   });
-
-  if (sections.length === 0) {
-    sections.push(
-      { heading: 'CONTRAINDICATIONS', content: 'SKYRIZI is contraindicated in patients with a history of serious hypersensitivity reaction to risankizumab-rzaa or any of the excipients.' },
-      { heading: 'WARNINGS - Hypersensitivity', content: 'Serious hypersensitivity reactions, including anaphylaxis, have been reported. If a serious hypersensitivity reaction occurs, discontinue SKYRIZI and initiate appropriate therapy immediately.' },
-      { heading: 'WARNINGS - Infections', content: 'SKYRIZI may increase the risk of infection. Instruct patients to report signs or symptoms of clinically important infection.' },
-    );
-  }
 
   return sections;
 }
@@ -254,29 +414,35 @@ function extractSafetyInfo(document) {
  */
 function extractEfficacyData(document) {
   const data = {
-    title: 'PASI Response at Week 16',
+    title: '',
     items: [],
   };
 
-  const dataEls = document.querySelectorAll('[class*="efficacy"], [class*="pasi"], [class*="result"]');
-
-  dataEls.forEach((el) => {
-    const label = getText(el.querySelector('.label, h3, h4'));
-    const value = getText(el.querySelector('.value, .percentage, [class*="number"]'));
-    const desc = getText(el.querySelector('.description, p'));
-
-    if (label || value) {
-      data.items.push({ label: label || '', value: value || '', description: desc || '' });
-    }
-  });
-
-  if (data.items.length === 0) {
-    data.items = [
-      { label: 'PASI 75', value: '91%', description: 'Patients achieving PASI 75' },
-      { label: 'PASI 90', value: '75%', description: 'Patients achieving PASI 90' },
-      { label: 'PASI 100', value: '51%', description: 'Patients achieving complete skin clearance' },
-    ];
+  // Look for PASI response title
+  const titleEl = document.querySelector('h2:contains("PASI"), [class*="efficacy"] h2');
+  if (titleEl) {
+    data.title = getText(titleEl);
   }
+
+  // Look for PASI values
+  const pasiLabels = ['PASI 75', 'PASI 90', 'PASI 100'];
+  pasiLabels.forEach((label) => {
+    const els = document.querySelectorAll('*');
+    els.forEach((el) => {
+      const text = getText(el);
+      if (text.includes(label)) {
+        const parent = el.parentElement;
+        const percentMatch = parent?.textContent?.match(/(\d{2,3})%/);
+        if (percentMatch) {
+          data.items.push({
+            label: label,
+            value: `${percentMatch[1]}%`,
+            description: `Patients achieving ${label}`,
+          });
+        }
+      }
+    });
+  });
 
   return data;
 }
@@ -287,10 +453,11 @@ function extractEfficacyData(document) {
 function detectPageType(url) {
   const urlLower = url.toLowerCase();
   if (urlLower.includes('access')) return 'access';
-  if (urlLower.includes('h2h') || urlLower.includes('head-to-head')) return 'h2h';
+  if (urlLower.includes('h2h') || urlLower.includes('head-to-head') || urlLower.includes('switch')) return 'h2h';
   if (urlLower.includes('overview')) return 'overview';
   if (urlLower.includes('pasi') || urlLower.includes('efficacy')) return 'pasi';
   if (urlLower.includes('safety')) return 'safety';
+  if (urlLower.includes('dosing')) return 'dosing';
   return 'access';
 }
 
@@ -302,44 +469,66 @@ function buildAccessPage(doc, brand, isiLines, indications, coverage, support, n
 
   // Hero block
   const heroRows = [['Hero']];
-  heroRows.push([`<img src="${brand.logo}" alt="SKYRIZI Logo">`, '']);
+  if (brand.logo) {
+    heroRows.push([`<img src="${brand.logo}" alt="SKYRIZI Logo">`, '']);
+  }
   isiLines.forEach((isi) => {
     heroRows.push([isi.toggle, `${isi.text} <a href="${isi.linkHref}">${isi.linkText}</a>`]);
   });
   elements.push(heroRows);
 
   // Indications block
-  const indicationsRows = [['Cards']];
-  indicationsRows.push(['INDICATIONS', '']);
-  indications.forEach((ind) => {
-    indicationsRows.push([ind.condition, ind.description]);
-  });
-  indicationsRows.push(['Please see <a href="https://www.rxabbvie.com/pdf/skyrizi_pi.pdf">Full Prescribing Information</a>.', '']);
-  elements.push(indicationsRows);
+  if (indications.length > 0) {
+    const indicationsRows = [['Cards']];
+    indicationsRows.push(['INDICATIONS', '']);
+    indications.forEach((ind) => {
+      indicationsRows.push([ind.condition, ind.description]);
+    });
+    indicationsRows.push(['Please see <a href="https://www.rxabbvie.com/pdf/skyrizi_pi.pdf">Full Prescribing Information</a>.', '']);
+    elements.push(indicationsRows);
+  }
 
   // Coverage block
-  const coverageRows = [['Columns']];
-  coverageRows.push([coverage.title]);
-  coverageRows.push(coverage.tabs);
-  coverage.stats.forEach((stat) => {
-    coverageRows.push([stat.label, `${stat.value}%`, stat.description]);
-  });
-  coverageRows.push([coverage.footnote]);
-  elements.push(coverageRows);
+  if (coverage.stats.length > 0) {
+    const coverageRows = [['Columns']];
+    if (coverage.title) {
+      coverageRows.push([coverage.title]);
+    }
+    if (coverage.tabs.length > 0) {
+      coverageRows.push(coverage.tabs);
+    }
+    coverage.stats.forEach((stat) => {
+      coverageRows.push([stat.label, `${stat.value}%`, stat.description]);
+    });
+    if (coverage.footnote) {
+      coverageRows.push([coverage.footnote]);
+    }
+    elements.push(coverageRows);
+  }
 
   // Support block
-  const supportRows = [['Cards']];
-  supportRows.push([support.title, '']);
-  support.cards.forEach((card) => {
-    supportRows.push([card.icon, `**${card.title}** ${card.description}`]);
-  });
-  supportRows.push([`<a href="${support.cta.link}">${support.cta.label}</a>`, '']);
-  supportRows.push([support.footnotes, '']);
-  elements.push(supportRows);
+  if (support.cards.length > 0) {
+    const supportRows = [['Cards']];
+    if (support.title) {
+      supportRows.push([support.title, '']);
+    }
+    support.cards.forEach((card) => {
+      supportRows.push([card.icon, `**${card.title}** ${card.description}`]);
+    });
+    if (support.cta.label) {
+      supportRows.push([`<a href="${support.cta.link}">${support.cta.label}</a>`, '']);
+    }
+    if (support.footnotes) {
+      supportRows.push([support.footnotes, '']);
+    }
+    elements.push(supportRows);
+  }
 
   // Navigation block
-  const navLinks = navItems.map((item) => `<a href="${item.link}">${item.label}</a>`).join(' ');
-  elements.push([['Fragment'], [navLinks]]);
+  if (navItems.length > 0) {
+    const navLinks = navItems.map((item) => `<a href="${item.link}">${item.label}</a>`).join(' ');
+    elements.push([['Fragment'], [navLinks]]);
+  }
 
   // Metadata
   elements.push([
@@ -359,23 +548,29 @@ function buildSafetyPage(doc, brand, isiLines, safetySections, navItems) {
 
   // Hero block
   const heroRows = [['Hero']];
-  heroRows.push([`<img src="${brand.logo}" alt="SKYRIZI Logo">`, '']);
+  if (brand.logo) {
+    heroRows.push([`<img src="${brand.logo}" alt="SKYRIZI Logo">`, '']);
+  }
   isiLines.forEach((isi) => {
     heroRows.push([isi.toggle, `${isi.text} <a href="${isi.linkHref}">${isi.linkText}</a>`]);
   });
   elements.push(heroRows);
 
   // Safety block
-  const safetyRows = [['Accordion']];
-  safetyRows.push(['Important Safety Information', '']);
-  safetySections.forEach((section) => {
-    safetyRows.push([section.heading, section.content]);
-  });
-  elements.push(safetyRows);
+  if (safetySections.length > 0) {
+    const safetyRows = [['Accordion']];
+    safetyRows.push(['Important Safety Information', '']);
+    safetySections.forEach((section) => {
+      safetyRows.push([section.heading, section.content]);
+    });
+    elements.push(safetyRows);
+  }
 
   // Navigation
-  const navLinks = navItems.map((item) => `<a href="${item.link}">${item.label}</a>`).join(' ');
-  elements.push([['Fragment'], [navLinks]]);
+  if (navItems.length > 0) {
+    const navLinks = navItems.map((item) => `<a href="${item.link}">${item.label}</a>`).join(' ');
+    elements.push([['Fragment'], [navLinks]]);
+  }
 
   // Metadata
   elements.push([
@@ -395,30 +590,38 @@ function buildPasiPage(doc, brand, isiLines, efficacyData, navItems) {
 
   // Hero block
   const heroRows = [['Hero']];
-  heroRows.push([`<img src="${brand.logo}" alt="SKYRIZI Logo">`, '']);
+  if (brand.logo) {
+    heroRows.push([`<img src="${brand.logo}" alt="SKYRIZI Logo">`, '']);
+  }
   isiLines.forEach((isi) => {
     heroRows.push([isi.toggle, `${isi.text} <a href="${isi.linkHref}">${isi.linkText}</a>`]);
   });
   elements.push(heroRows);
 
   // Efficacy block
-  const efficacyRows = [['Columns']];
-  efficacyRows.push([efficacyData.title]);
-  efficacyData.items.forEach((item) => {
-    efficacyRows.push([item.label, item.value, item.description]);
-  });
-  elements.push(efficacyRows);
+  if (efficacyData.items.length > 0) {
+    const efficacyRows = [['Columns']];
+    if (efficacyData.title) {
+      efficacyRows.push([efficacyData.title]);
+    }
+    efficacyData.items.forEach((item) => {
+      efficacyRows.push([item.label, item.value, item.description]);
+    });
+    elements.push(efficacyRows);
 
-  // Stats block
-  const statsRows = [['Cards']];
-  efficacyData.items.forEach((item) => {
-    statsRows.push([item.value, item.label, item.description]);
-  });
-  elements.push(statsRows);
+    // Stats block
+    const statsRows = [['Cards']];
+    efficacyData.items.forEach((item) => {
+      statsRows.push([item.value, item.label, item.description]);
+    });
+    elements.push(statsRows);
+  }
 
   // Navigation
-  const navLinks = navItems.map((item) => `<a href="${item.link}">${item.label}</a>`).join(' ');
-  elements.push([['Fragment'], [navLinks]]);
+  if (navItems.length > 0) {
+    const navLinks = navItems.map((item) => `<a href="${item.link}">${item.label}</a>`).join(' ');
+    elements.push([['Fragment'], [navLinks]]);
+  }
 
   // Metadata
   elements.push([
@@ -432,7 +635,7 @@ function buildPasiPage(doc, brand, isiLines, efficacyData, navItems) {
 
 /**
  * Main transform function for Helix AEM Importer
- * Uses WebImporter.DOMUtils.createTable for proper block creation
+ * Extracts content from live site DOM - no hardcoded values
  */
 export default {
   transform: ({ document, url, html, params }) => {
@@ -441,7 +644,7 @@ export default {
 
     const pageType = detectPageType(url);
 
-    // Extract content from the page
+    // Extract all content from the live page DOM
     const brand = extractBrandInfo(document);
     const isiLines = extractISILines(document);
     const indications = extractIndications(document);
@@ -450,6 +653,19 @@ export default {
     const navItems = extractNavigation(document);
     const safetySections = extractSafetyInfo(document);
     const efficacyData = extractEfficacyData(document);
+
+    // Log extracted data for debugging
+    console.log('[SKYRIZI IMPORT] Extracted:', {
+      pageType,
+      brand,
+      isiLinesCount: isiLines.length,
+      indicationsCount: indications.length,
+      coverageStatsCount: coverage.stats.length,
+      supportCardsCount: support.cards.length,
+      navItemsCount: navItems.length,
+      safetySectionsCount: safetySections.length,
+      efficacyItemsCount: efficacyData.items.length,
+    });
 
     let result;
 
@@ -463,6 +679,7 @@ export default {
       case 'h2h':
       case 'overview':
       case 'access':
+      case 'dosing':
       default:
         result = buildAccessPage(document, brand, isiLines, indications, coverage, support, navItems);
         break;
