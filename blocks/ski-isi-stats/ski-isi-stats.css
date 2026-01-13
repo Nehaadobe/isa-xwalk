@@ -1,0 +1,70 @@
+/* SKI ISI Stats Block Styles */
+
+.ski-isi-stats {
+  padding: 2rem 1rem;
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+}
+
+.ski-isi-stats-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.ski-isi-stat-card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 1.5rem;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.ski-isi-stat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+}
+
+.stat-value {
+  font-size: 3.5rem;
+  font-weight: 700;
+  color: #10a4de;
+  line-height: 1;
+  margin-bottom: 0.5rem;
+}
+
+.stat-value .percent {
+  font-size: 2rem;
+  vertical-align: super;
+}
+
+.stat-label {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #333;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 0.5rem;
+}
+
+.stat-description {
+  font-size: 0.8rem;
+  color: #666;
+  line-height: 1.4;
+}
+
+.stat-description sup {
+  font-size: 0.6rem;
+}
+
+@media (min-width: 768px) {
+  .ski-isi-stats {
+    padding: 3rem 2rem;
+  }
+
+  .stat-value {
+    font-size: 4.5rem;
+  }
+}

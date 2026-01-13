@@ -1,0 +1,64 @@
+{
+  "definitions": [
+    {
+      "title": "SKI ISI Stats",
+      "id": "ski-isi-stats",
+      "plugins": {
+        "xwalk": {
+          "page": {
+            "resourceType": "core/franklin/components/block/v1/block",
+            "template": {
+              "name": "Ski Isi Stats",
+              "model": "ski-isi-stats",
+              "filter": "ski-isi-stats"
+            }
+          }
+        }
+      }
+    }
+  ],
+  "models": [
+    {
+      "id": "ski-isi-stats",
+      "fields": [
+        {
+          "component": "richtext",
+          "valueType": "string",
+          "name": "title",
+          "label": "Section Title"
+        }
+      ]
+    },
+    {
+      "id": "ski-isi-stat-item",
+      "fields": [
+        {
+          "component": "text",
+          "valueType": "string",
+          "name": "value",
+          "label": "Value",
+          "description": "Statistical value (e.g., 99%)"
+        },
+        {
+          "component": "text",
+          "valueType": "string",
+          "name": "label",
+          "label": "Label",
+          "description": "Stat label (e.g., Commercial)"
+        },
+        {
+          "component": "richtext",
+          "valueType": "string",
+          "name": "description",
+          "label": "Description"
+        }
+      ]
+    }
+  ],
+  "filters": [
+    {
+      "id": "ski-isi-stats",
+      "components": ["ski-isi-stat-item"]
+    }
+  ]
+}

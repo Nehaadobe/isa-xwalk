@@ -1,0 +1,95 @@
+/* SKI ISA Indications Block Styles - SKYRIZI Brand */
+
+.ski-isa-indications {
+  background-color: #fff;
+  padding: 0;
+}
+
+.ski-isa-indications-wrapper {
+  max-width: 100%;
+}
+
+.ski-isa-indications-title {
+  margin-bottom: 0.75rem;
+}
+
+.ski-isa-indications-title h2 {
+  font-size: 1.1rem;
+  color: #10a4de;
+  font-weight: 700;
+  text-transform: none;
+  letter-spacing: 0;
+  margin: 0;
+}
+
+.ski-isa-indications-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.ski-isa-indication-item {
+  background: transparent;
+  border-left: none;
+  padding: 0;
+  border-radius: 0;
+  box-shadow: none;
+  margin-bottom: 0.5rem;
+}
+
+.indication-condition {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #10a4de;
+  margin-bottom: 0;
+  display: inline;
+}
+
+.indication-condition::after {
+  content: " ";
+}
+
+.indication-description {
+  display: inline;
+  font-size: 0.9rem;
+  color: #333;
+  line-height: 1.6;
+}
+
+.indication-description p {
+  display: inline;
+  margin: 0;
+}
+
+.ski-isa-indications-pi {
+  margin-top: 1rem;
+  padding-top: 0;
+  border-top: none;
+}
+
+.ski-isa-indications-pi p {
+  font-size: 0.9rem;
+  color: #333;
+  margin: 0;
+}
+
+.ski-isa-indications-pi a {
+  color: #10a4de;
+  text-decoration: underline;
+  font-weight: 600;
+}
+
+.ski-isa-indications-pi a:hover {
+  color: #0d8ec2;
+}
+
+@media (min-width: 768px) {
+  .ski-isa-indications-title h2 {
+    font-size: 1.25rem;
+  }
+
+  .indication-condition,
+  .indication-description {
+    font-size: 0.95rem;
+  }
+}

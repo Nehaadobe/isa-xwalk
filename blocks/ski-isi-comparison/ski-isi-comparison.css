@@ -1,0 +1,80 @@
+/* SKI ISI Comparison Block Styles */
+
+.ski-isi-comparison {
+  padding: 2rem 1rem;
+  background: #fff;
+}
+
+.ski-isi-comparison-container {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.comparison-title {
+  color: #10a4de;
+  font-size: 1.5rem;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.comparison-table {
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.comparison-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 1px;
+  background: #e0e0e0;
+}
+
+.comparison-row.header {
+  background: #193052;
+}
+
+.comparison-row.header .comparison-cell {
+  background: #193052;
+  color: #fff;
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+}
+
+.comparison-cell {
+  padding: 1rem;
+  background: #fff;
+  text-align: center;
+  font-size: 0.9rem;
+}
+
+.comparison-cell.label {
+  font-weight: 600;
+  background: #f8f9fa;
+  text-align: left;
+}
+
+.comparison-cell.value {
+  color: #333;
+}
+
+.comparison-cell strong {
+  color: #10a4de;
+  font-size: 1.5rem;
+}
+
+@media (min-width: 768px) {
+  .ski-isi-comparison {
+    padding: 3rem 2rem;
+  }
+
+  .comparison-title {
+    font-size: 1.8rem;
+  }
+
+  .comparison-cell {
+    padding: 1.25rem;
+  }
+}

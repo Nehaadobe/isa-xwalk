@@ -300,6 +300,359 @@
           }
         }
       ]
+    },
+    {
+      "title": "SKYRIZI ISA Blocks",
+      "id": "ski-isa-blocks",
+      "components": [
+        {
+          "title": "SKI ISA Hero",
+          "id": "ski-isa-hero",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block",
+                "template": {
+                  "name": "Ski Isa Hero",
+                  "model": "ski-isa-hero"
+                }
+              }
+            }
+          }
+        },
+        {
+          "title": "SKI ISA Coverage",
+          "id": "ski-isa-coverage",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block",
+                "template": {
+                  "name": "Ski Isa Coverage",
+                  "model": "ski-isa-coverage"
+                }
+              }
+            }
+          }
+        },
+        {
+          "title": "SKI ISA Support",
+          "id": "ski-isa-support",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block",
+                "template": {
+                  "name": "Ski Isa Support",
+                  "model": "ski-isa-support",
+                  "filter": "ski-isa-support"
+                }
+              }
+            }
+          }
+        },
+        {
+          "title": "SKI ISA Support Card",
+          "id": "ski-isa-support-card",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block/item",
+                "template": {
+                  "name": "Ski Isa Support Card",
+                  "model": "ski-isa-support-card"
+                }
+              }
+            }
+          }
+        },
+        {
+          "title": "SKI ISA Safety",
+          "id": "ski-isa-safety",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block",
+                "template": {
+                  "name": "Ski Isa Safety",
+                  "model": "ski-isa-safety",
+                  "filter": "ski-isa-safety"
+                }
+              }
+            }
+          }
+        },
+        {
+          "title": "SKI ISA Safety Section",
+          "id": "ski-isa-safety-section",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block/item",
+                "template": {
+                  "name": "Ski Isa Safety Section",
+                  "model": "ski-isa-safety-section"
+                }
+              }
+            }
+          }
+        },
+        {
+          "title": "SKI ISA Indications",
+          "id": "ski-isa-indications",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block",
+                "template": {
+                  "name": "Ski Isa Indications",
+                  "model": "ski-isa-indications",
+                  "filter": "ski-isa-indications"
+                }
+              }
+            }
+          }
+        },
+        {
+          "title": "SKI ISA Indication Item",
+          "id": "ski-isa-indication-item",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block/item",
+                "template": {
+                  "name": "Ski Isa Indication Item",
+                  "model": "ski-isa-indication-item"
+                }
+              }
+            }
+          }
+        },
+        {
+          "title": "SKI ISA Navigation",
+          "id": "ski-isa-nav",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block",
+                "template": {
+                  "name": "Ski Isa Nav",
+                  "filter": "ski-isa-nav"
+                }
+              }
+            }
+          }
+        },
+        {
+          "title": "SKI ISA Nav Item",
+          "id": "ski-isa-nav-item",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block/item",
+                "template": {
+                  "name": "Ski Isa Nav Item",
+                  "model": "ski-isa-nav-item"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "title": "SKYRIZI ISI Blocks",
+      "id": "ski-isi-blocks",
+      "components": [
+        {
+          "title": "SKI ISI Hero",
+          "id": "ski-isi-hero",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block",
+                "template": {
+                  "name": "Ski Isi Hero",
+                  "model": "ski-isi-hero",
+                  "filter": "ski-isi-hero"
+                }
+              }
+            }
+          }
+        },
+        {
+          "title": "SKI ISI Navigation",
+          "id": "ski-isi-nav",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block",
+                "template": {
+                  "name": "Ski Isi Nav",
+                  "filter": "ski-isi-nav"
+                }
+              }
+            }
+          }
+        },
+        {
+          "title": "SKI ISI Stats",
+          "id": "ski-isi-stats",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block",
+                "template": {
+                  "name": "Ski Isi Stats",
+                  "model": "ski-isi-stats",
+                  "filter": "ski-isi-stats"
+                }
+              }
+            }
+          }
+        },
+        {
+          "title": "SKI ISI Comparison",
+          "id": "ski-isi-comparison",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block",
+                "template": {
+                  "name": "Ski Isi Comparison",
+                  "model": "ski-isi-comparison",
+                  "filter": "ski-isi-comparison"
+                }
+              }
+            }
+          }
+        },
+        {
+          "title": "SKI ISI Efficacy",
+          "id": "ski-isi-efficacy",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block",
+                "template": {
+                  "name": "Ski Isi Efficacy",
+                  "model": "ski-isi-efficacy",
+                  "filter": "ski-isi-efficacy"
+                }
+              }
+            }
+          }
+        },
+        {
+          "title": "SKI ISI Coverage",
+          "id": "ski-isi-coverage",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block",
+                "template": {
+                  "name": "Ski Isi Coverage",
+                  "model": "ski-isi-coverage"
+                }
+              }
+            }
+          }
+        },
+        {
+          "title": "SKI ISI Support",
+          "id": "ski-isi-support",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block",
+                "template": {
+                  "name": "Ski Isi Support",
+                  "model": "ski-isi-support",
+                  "filter": "ski-isi-support"
+                }
+              }
+            }
+          }
+        },
+        {
+          "title": "SKI ISI Indications",
+          "id": "ski-isi-indications",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block",
+                "template": {
+                  "name": "Ski Isi Indications",
+                  "model": "ski-isi-indications",
+                  "filter": "ski-isi-indications"
+                }
+              }
+            }
+          }
+        },
+        {
+          "title": "SKI ISI Safety",
+          "id": "ski-isi-safety",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block",
+                "template": {
+                  "name": "Ski Isi Safety",
+                  "model": "ski-isi-safety",
+                  "filter": "ski-isi-safety"
+                }
+              }
+            }
+          }
+        },
+        {
+          "title": "SKI ISI Tabs",
+          "id": "ski-isi-tabs",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block",
+                "template": {
+                  "name": "Ski Isi Tabs",
+                  "filter": "ski-isi-tabs"
+                }
+              }
+            }
+          }
+        },
+        {
+          "title": "SKI ISI Cards",
+          "id": "ski-isi-cards",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block",
+                "template": {
+                  "name": "Ski Isi Cards",
+                  "filter": "ski-isi-cards"
+                }
+              }
+            }
+          }
+        },
+        {
+          "title": "SKI ISI Chart",
+          "id": "ski-isi-chart",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block",
+                "template": {
+                  "name": "Ski Isi Chart",
+                  "model": "ski-isi-chart",
+                  "filter": "ski-isi-chart"
+                }
+              }
+            }
+          }
+        }
+      ]
     }
   ]
 }

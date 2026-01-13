@@ -1,0 +1,109 @@
+{
+  "definitions": [
+    {
+      "title": "SKI ISA Coverage",
+      "id": "ski-isa-coverage",
+      "plugins": {
+        "xwalk": {
+          "page": {
+            "resourceType": "core/franklin/components/block/v1/block",
+            "template": {
+              "name": "Ski Isa Coverage",
+              "model": "ski-isa-coverage"
+            }
+          }
+        }
+      }
+    }
+  ],
+  "models": [
+    {
+      "id": "ski-isa-coverage",
+      "fields": [
+        {
+          "component": "richtext",
+          "valueType": "string",
+          "name": "title",
+          "label": "Title",
+          "description": "Main headline for coverage section"
+        },
+        {
+          "component": "text",
+          "valueType": "string",
+          "name": "tab1",
+          "label": "Tab 1",
+          "value": "Overview"
+        },
+        {
+          "component": "text",
+          "valueType": "string",
+          "name": "tab2",
+          "label": "Tab 2",
+          "value": "National"
+        },
+        {
+          "component": "text",
+          "valueType": "string",
+          "name": "tab3",
+          "label": "Tab 3",
+          "value": "Local"
+        },
+        {
+          "component": "text",
+          "valueType": "string",
+          "name": "commercialLabel",
+          "label": "Commercial Label",
+          "value": "Commercial"
+        },
+        {
+          "component": "text",
+          "valueType": "string",
+          "name": "commercialPercentage",
+          "label": "Commercial Percentage",
+          "description": "e.g., 99%"
+        },
+        {
+          "component": "richtext",
+          "valueType": "string",
+          "name": "commercialDescription",
+          "label": "Commercial Description"
+        },
+        {
+          "component": "text",
+          "valueType": "string",
+          "name": "medicareLabel",
+          "label": "Medicare Label",
+          "value": "Medicare Part D"
+        },
+        {
+          "component": "text",
+          "valueType": "string",
+          "name": "medicarePercentage",
+          "label": "Medicare Percentage",
+          "description": "e.g., 97%"
+        },
+        {
+          "component": "richtext",
+          "valueType": "string",
+          "name": "medicareDescription",
+          "label": "Medicare Description"
+        },
+        {
+          "component": "richtext",
+          "valueType": "string",
+          "name": "benefits",
+          "label": "Benefits List",
+          "description": "List of coverage benefits"
+        },
+        {
+          "component": "richtext",
+          "valueType": "string",
+          "name": "footnote",
+          "label": "Footnote",
+          "description": "Disclaimer text"
+        }
+      ]
+    }
+  ],
+  "filters": []
+}

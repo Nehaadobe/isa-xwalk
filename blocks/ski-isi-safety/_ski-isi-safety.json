@@ -1,0 +1,56 @@
+{
+  "definitions": [
+    {
+      "title": "SKI ISI Safety",
+      "id": "ski-isi-safety",
+      "plugins": {
+        "xwalk": {
+          "page": {
+            "resourceType": "core/franklin/components/block/v1/block",
+            "template": {
+              "name": "Ski Isi Safety",
+              "model": "ski-isi-safety",
+              "filter": "ski-isi-safety"
+            }
+          }
+        }
+      }
+    }
+  ],
+  "models": [
+    {
+      "id": "ski-isi-safety",
+      "fields": [
+        {
+          "component": "richtext",
+          "valueType": "string",
+          "name": "title",
+          "label": "Section Title"
+        }
+      ]
+    },
+    {
+      "id": "ski-isi-safety-section",
+      "fields": [
+        {
+          "component": "text",
+          "valueType": "string",
+          "name": "heading",
+          "label": "Heading"
+        },
+        {
+          "component": "richtext",
+          "valueType": "string",
+          "name": "content",
+          "label": "Content"
+        }
+      ]
+    }
+  ],
+  "filters": [
+    {
+      "id": "ski-isi-safety",
+      "components": ["ski-isi-safety-section"]
+    }
+  ]
+}

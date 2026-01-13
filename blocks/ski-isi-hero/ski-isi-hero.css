@@ -1,0 +1,222 @@
+/* SKI ISI Hero Block Styles - SKYRIZI Brand */
+
+.ski-isi-hero {
+  background: linear-gradient(180deg, #002d72 0%, #003087 100%);
+  padding: 0;
+  color: #fff;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+/* Top Bar with ISI Toggle - Dark Navy */
+.ski-isi-hero-topbar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: #193052;
+  padding: 8px 16px;
+  font-size: 11px;
+  text-align: center;
+  line-height: 1.5;
+}
+
+.ski-isi-hero-topbar .topbar-line {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 2px 0;
+}
+
+.ski-isi-hero-topbar .topbar-text {
+  color: #fff;
+  font-weight: 400;
+}
+
+.ski-isi-hero-topbar .topbar-toggle {
+  display: inline;
+  background: transparent;
+  border: none;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  text-decoration: underline;
+  padding: 0;
+  margin: 0;
+  transition: opacity 0.2s;
+}
+
+.ski-isi-hero-topbar .topbar-toggle:hover {
+  opacity: 0.85;
+}
+
+.ski-isi-hero-topbar .topbar-link {
+  color: #fff;
+  text-decoration: underline;
+  font-weight: 400;
+}
+
+.ski-isi-hero-topbar .topbar-link:hover {
+  opacity: 0.85;
+}
+
+/* Collapsible Safety Panel */
+.ski-isi-hero-safety {
+  background: #fff;
+  position: relative;
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+}
+
+.ski-isi-hero-safety.collapsed .safety-content {
+  display: none;
+}
+
+.safety-toggle {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 44px;
+  height: 44px;
+  background: #10a4de;
+  border: none;
+  color: #fff;
+  font-size: 24px;
+  font-weight: 300;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  transition: background 0.2s;
+}
+
+.safety-toggle:hover {
+  background: #0d8ec2;
+}
+
+.safety-content {
+  padding: 16px 16px 16px 56px;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.safety-title {
+  color: #10a4de;
+  font-size: 18px;
+  font-weight: 700;
+  margin: 0 0 16px 0;
+}
+
+.safety-title sup {
+  font-size: 10px;
+  font-weight: 700;
+  background: #10a4de;
+  color: #fff;
+  border-radius: 50%;
+  padding: 2px 6px;
+  margin-left: 4px;
+  vertical-align: super;
+}
+
+.safety-body h3 {
+  color: #10a4de;
+  font-size: 14px;
+  font-weight: 700;
+  margin: 12px 0 4px;
+}
+
+.safety-body p {
+  font-size: 13px;
+  color: #333;
+  line-height: 1.6;
+  margin: 0 0 8px;
+}
+
+.safety-body strong {
+  color: #10a4de;
+}
+
+/* Hero Wrapper - Logo and Nav */
+.ski-isi-hero-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  background: #002d72;
+}
+
+.ski-isi-hero-logo {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.ski-isi-hero-logo img {
+  height: 40px;
+  width: auto;
+  filter: brightness(0) invert(1);
+}
+
+.ski-isi-hero-logo .brand-subtitle {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.9);
+  margin-top: 2px;
+  letter-spacing: 0.3px;
+}
+
+/* Navigation Icons */
+.ski-isi-hero-nav {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.ski-isi-hero-nav .nav-icon {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  margin: 0;
+  transition: opacity 0.2s;
+}
+
+.ski-isi-hero-nav .nav-icon:hover {
+  opacity: 0.75;
+}
+
+.ski-isi-hero-nav .nav-icon svg {
+  width: 28px;
+  height: 28px;
+}
+
+@media (min-width: 768px) {
+  .ski-isi-hero-wrapper {
+    padding: 12px 24px;
+  }
+
+  .ski-isi-hero-logo img {
+    height: 48px;
+  }
+
+  .ski-isi-hero-logo .brand-subtitle {
+    font-size: 12px;
+  }
+
+  .safety-content {
+    padding: 20px 20px 20px 60px;
+  }
+
+  .safety-title {
+    font-size: 20px;
+  }
+}

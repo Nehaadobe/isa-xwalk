@@ -1,0 +1,187 @@
+/* SKI ISA Support Block Styles - SKYRIZI Brand */
+
+.ski-isa-support {
+  background-color: #f5f5f5;
+  padding: 2rem 1.5rem;
+}
+
+.ski-isa-support-wrapper {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.ski-isa-support-title {
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.ski-isa-support-title h2 {
+  font-size: 1.1rem;
+  color: #333;
+  font-weight: 400;
+  margin: 0;
+}
+
+/* Support Program Logo/Badge Area */
+.ski-isa-support-program {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.ski-isa-support-program img {
+  height: 40px;
+  width: auto;
+}
+
+/* Cards Grid - 3 Column */
+.ski-isa-support-cards {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.ski-isa-support-card {
+  background: #fff;
+  border: none;
+  border-radius: 0;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 1rem;
+  box-shadow: none;
+}
+
+/* Card Icons */
+.support-card-icon {
+  width: 60px;
+  height: 60px;
+  min-width: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #10a4de;
+  border-radius: 50%;
+  color: #fff;
+}
+
+.support-card-icon svg {
+  width: 28px;
+  height: 28px;
+}
+
+/* $5 Icon Style */
+.support-card-icon.affordability {
+  background: #10a4de;
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.support-card-icon.affordability::before {
+  content: '$5';
+  color: #fff;
+}
+
+.support-card-content {
+  flex: 1;
+}
+
+.support-card-title {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #10a4de;
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
+  letter-spacing: 0.5px;
+}
+
+.support-card-description {
+  font-size: 0.85rem;
+  color: #333;
+  line-height: 1.5;
+}
+
+.support-card-description strong {
+  color: #10a4de;
+}
+
+/* CTA Button */
+.ski-isa-support-cta {
+  text-align: center;
+  margin-top: 1.5rem;
+}
+
+.ski-isa-support-btn {
+  display: inline-block;
+  background: #10a4de;
+  color: #fff;
+  padding: 0.875rem 2rem;
+  border-radius: 4px;
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  transition: background 0.2s;
+}
+
+.ski-isa-support-btn:hover {
+  background: #0d8ec2;
+  color: #fff;
+  text-decoration: none;
+}
+
+/* Footnotes */
+.ski-isa-support-footnotes {
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid #ddd;
+  font-size: 0.7rem;
+  color: #666;
+  line-height: 1.5;
+  text-align: center;
+}
+
+.ski-isa-support-footnotes p {
+  margin: 0.25rem 0;
+}
+
+@media (min-width: 768px) {
+  .ski-isa-support {
+    padding: 2.5rem;
+  }
+
+  .ski-isa-support-cards {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0;
+  }
+
+  .ski-isa-support-card {
+    padding: 1.5rem 1rem;
+    border-right: 1px solid #eee;
+  }
+
+  .ski-isa-support-card:last-child {
+    border-right: none;
+  }
+
+  .ski-isa-support-title h2 {
+    font-size: 1.25rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .ski-isa-support-card {
+    padding: 2rem 1.5rem;
+  }
+
+  .support-card-icon {
+    width: 70px;
+    height: 70px;
+  }
+}

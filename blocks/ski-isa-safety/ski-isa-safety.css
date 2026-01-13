@@ -1,0 +1,265 @@
+/* SKI ISA Safety Block Styles - SKYRIZI Brand */
+
+.ski-isa-safety {
+  background-color: #fff;
+  border-radius: 0;
+  margin: 0;
+  overflow: visible;
+  position: relative;
+}
+
+/* Modal Overlay Style */
+.ski-isa-safety.modal-style {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 90%;
+  max-width: 900px;
+  max-height: 85vh;
+  overflow-y: auto;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+  z-index: 1000;
+  border-radius: 0;
+}
+
+.ski-isa-safety-wrapper {
+  max-width: 100%;
+}
+
+/* Header with Logo */
+.ski-isa-safety-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 1.5rem 2rem;
+  background: #fff;
+  border-bottom: none;
+}
+
+.ski-isa-safety-logo {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.ski-isa-safety-logo img {
+  height: 50px;
+  width: auto;
+}
+
+.ski-isa-safety-logo .brand-subtitle {
+  font-size: 0.75rem;
+  color: #666;
+  margin-top: 2px;
+}
+
+/* Close Button */
+.ski-isa-safety-close {
+  background: #10a4de;
+  border: none;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #fff;
+  font-size: 1.5rem;
+  font-weight: 300;
+  line-height: 1;
+  transition: background 0.2s;
+}
+
+.ski-isa-safety-close:hover {
+  background: #0d8ec2;
+}
+
+.ski-isa-safety-close::before {
+  content: '×';
+}
+
+/* Main Title */
+.ski-isa-safety-title {
+  color: #10a4de;
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin: 0 0 1.5rem 0;
+  padding: 0 2rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.ski-isa-safety-title sup {
+  font-size: 0.6em;
+  vertical-align: super;
+}
+
+/* Legacy header toggle - hide */
+.ski-isa-safety-toggle {
+  display: none;
+}
+
+/* Content Area */
+.ski-isa-safety-content {
+  padding: 0 2rem 2rem;
+  max-height: none;
+  overflow: visible;
+}
+
+.ski-isa-safety.collapsed .ski-isa-safety-content {
+  max-height: none;
+  padding: 0 2rem 2rem;
+}
+
+.ski-isa-safety-sections {
+  display: block;
+}
+
+/* Section Headings */
+.ski-isa-safety-section {
+  padding-bottom: 0;
+  border-bottom: none;
+  margin-bottom: 1rem;
+}
+
+.ski-isa-safety-section:last-child {
+  margin-bottom: 0;
+}
+
+/* Main Section Titles (like "Indications", "Important Safety Information") */
+.ski-isa-safety-section > h2,
+.ski-isa-safety-section .section-main-title {
+  color: #10a4de;
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin: 1.5rem 0 0.75rem;
+  text-transform: none;
+}
+
+/* Sub-section Titles (like "Hypersensitivity Reactions", "Infection") */
+.safety-section-title,
+.ski-isa-safety-section h3 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #f47920;
+  margin: 1rem 0 0.25rem;
+}
+
+/* Indication Labels (like "Plaque Psoriasis:", "Psoriatic Arthritis:") */
+.indication-label,
+.ski-isa-safety-section .condition-name {
+  color: #10a4de;
+  font-weight: 700;
+  font-size: 0.9rem;
+  display: inline;
+}
+
+/* Content Text */
+.safety-section-content,
+.ski-isa-safety-section p {
+  font-size: 0.9rem;
+  color: #333;
+  line-height: 1.6;
+  margin: 0 0 0.5rem;
+}
+
+.safety-section-content p:last-child {
+  margin-bottom: 0;
+}
+
+/* Inline indication style */
+.ski-isa-safety-section .indication-item {
+  margin-bottom: 0.75rem;
+}
+
+.ski-isa-safety-section .indication-item .condition-name {
+  display: inline;
+}
+
+.ski-isa-safety-section .indication-item .condition-name::after {
+  content: ' ';
+}
+
+.ski-isa-safety-section .indication-item p {
+  display: inline;
+  margin: 0;
+}
+
+/* Links */
+.ski-isa-safety a {
+  color: #10a4de;
+  text-decoration: underline;
+}
+
+.ski-isa-safety a:hover {
+  color: #0d8ec2;
+}
+
+/* Reference Section */
+.ski-isa-safety-reference {
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid #e0e0e0;
+  font-size: 0.8rem;
+  color: #666;
+}
+
+.ski-isa-safety-reference p {
+  margin: 0.25rem 0;
+}
+
+/* Project Number */
+.ski-isa-safety-project-num {
+  text-align: right;
+  font-size: 0.75rem;
+  color: #999;
+  margin-top: 1rem;
+  padding: 0 2rem 1rem;
+}
+
+@media (min-width: 768px) {
+  .ski-isa-safety-header {
+    padding: 2rem;
+  }
+
+  .ski-isa-safety-title {
+    font-size: 1.25rem;
+    padding: 0 2rem;
+  }
+
+  .ski-isa-safety-logo img {
+    height: 60px;
+  }
+
+  .ski-isa-safety-content {
+    padding: 0 2rem 2rem;
+  }
+
+  .ski-isa-safety-section > h2 {
+    font-size: 1.25rem;
+  }
+
+  .safety-section-title {
+    font-size: 1rem;
+  }
+}
+
+/* Scrollbar Styling */
+.ski-isa-safety::-webkit-scrollbar {
+  width: 8px;
+}
+
+.ski-isa-safety::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+.ski-isa-safety::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 4px;
+}
+
+.ski-isa-safety::-webkit-scrollbar-thumb:hover {
+  background: #999;
+}

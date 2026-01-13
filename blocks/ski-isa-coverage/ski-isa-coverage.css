@@ -1,0 +1,216 @@
+/* SKI ISA Coverage Block Styles - SKYRIZI Brand */
+
+.ski-isa-coverage {
+  background: linear-gradient(135deg, #10a4de 0%, #0d8ec2 100%);
+  padding: 2rem 1.5rem;
+  color: #fff;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Baseball Hero Image - Hidden on mobile */
+.ski-isa-coverage::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 280px;
+  height: 100%;
+  background-image: url('/content/skyrizi/images/baseball-hero.png');
+  background-repeat: no-repeat;
+  background-position: left bottom;
+  background-size: contain;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 0;
+  transition: opacity 0.3s;
+}
+
+.ski-isa-coverage-wrapper {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  position: relative;
+  z-index: 1;
+}
+
+/* Left Column - Title & Tabs */
+.ski-isa-coverage-left {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.ski-isa-coverage-title h2 {
+  font-size: 1.1rem;
+  color: #fff;
+  font-weight: 700;
+  line-height: 1.4;
+  margin: 0;
+}
+
+/* Tabs */
+.ski-isa-coverage-tabs {
+  display: flex;
+  gap: 0;
+}
+
+.ski-isa-coverage-tab {
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  padding: 0.6rem 1rem;
+  color: #fff;
+  font-weight: 600;
+  font-size: 0.75rem;
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  transition: background 0.2s;
+}
+
+.ski-isa-coverage-tab:first-child {
+  border-radius: 4px 0 0 4px;
+}
+
+.ski-isa-coverage-tab:last-child {
+  border-radius: 0 4px 4px 0;
+}
+
+.ski-isa-coverage-tab.active,
+.ski-isa-coverage-tab:hover {
+  background: rgba(255, 255, 255, 0.4);
+}
+
+/* Right Column - Stats & Benefits */
+.ski-isa-coverage-right {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* Stats Grid */
+.ski-isa-coverage-stats {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+}
+
+.ski-isa-coverage-stat-card {
+  background: #fff;
+  border-radius: 8px;
+  padding: 1.25rem 1rem;
+  text-align: center;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+  flex: 1;
+}
+
+.stat-label {
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  color: #666;
+  margin: 0 0 0.25rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+.stat-percentage {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  margin-bottom: 0.25rem;
+}
+
+.stat-number {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #10a4de;
+  line-height: 1;
+}
+
+.stat-symbol {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #10a4de;
+  vertical-align: super;
+}
+
+.stat-description {
+  font-size: 0.6rem;
+  color: #333;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-weight: 600;
+}
+
+/* Benefits Section */
+.ski-isa-coverage-benefits {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 8px;
+  padding: 1rem;
+}
+
+.ski-isa-coverage-benefits p {
+  margin: 0;
+  font-size: 0.85rem;
+  line-height: 1.5;
+}
+
+.ski-isa-coverage-benefits strong {
+  color: #fff;
+}
+
+@media (min-width: 768px) {
+  .ski-isa-coverage {
+    padding: 2.5rem;
+  }
+
+  .ski-isa-coverage::before {
+    opacity: 0.9;
+    width: 320px;
+  }
+
+  .ski-isa-coverage-wrapper {
+    flex-direction: row;
+    align-items: flex-start;
+  }
+
+  .ski-isa-coverage-left {
+    flex: 0 0 40%;
+  }
+
+  .ski-isa-coverage-right {
+    flex: 1;
+  }
+
+  .ski-isa-coverage-title h2 {
+    font-size: 1.25rem;
+  }
+
+  .stat-number {
+    font-size: 3.5rem;
+  }
+
+  .stat-symbol {
+    font-size: 1.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .ski-isa-coverage-left {
+    flex: 0 0 35%;
+  }
+
+  .ski-isa-coverage-stats {
+    gap: 1.5rem;
+  }
+
+  .ski-isa-coverage-stat-card {
+    padding: 1.5rem;
+  }
+
+  .stat-number {
+    font-size: 4rem;
+  }
+}
