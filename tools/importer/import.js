@@ -25,10 +25,22 @@ function createDivider(doc) {
 }
 
 /**
+ * Helper: Find element by text content
+ */
+function findByText(document, selector, searchText) {
+  const elements = document.querySelectorAll(selector);
+  for (const el of elements) {
+    if (getText(el).toLowerCase().includes(searchText.toLowerCase())) {
+      return el;
+    }
+  }
+  return null;
+}
+
+/**
  * Extract brand/logo info from page
  */
 function extractBrandInfo(document) {
-  // Look for SKYRIZI logo
   const logo = document.querySelector('img[alt*="Skyrizi"], img[alt*="SKYRIZI"], .logo img, header img');
 
   return {
@@ -44,25 +56,19 @@ function extractBrandInfo(document) {
 function extractISILines(document) {
   const isiLines = [];
 
-  // Look for ISI toggle text in the live site structure
   const isiContainer = document.querySelector('[class*="isi"], [class*="topbar"], .safety-info');
 
   if (isiContainer) {
-    // Extract SKYRIZI ISI line
     const skyriziText = isiContainer.textContent;
     if (skyriziText.includes('SKYRIZI')) {
-      const skyriziMatch = skyriziText.match(/Tap here.*?(?=Tap here|$)/i);
-      if (skyriziMatch) {
-        isiLines.push({
-          toggle: 'Tap here',
-          text: 'for SKYRIZI Indications and additional Important Safety Information.',
-          linkText: 'See Full Prescribing Information',
-          linkHref: 'https://www.rxabbvie.com/pdf/skyrizi_pi.pdf',
-        });
-      }
+      isiLines.push({
+        toggle: 'Tap here',
+        text: 'for SKYRIZI Indications and additional Important Safety Information.',
+        linkText: 'See Full Prescribing Information',
+        linkHref: 'https://www.rxabbvie.com/pdf/skyrizi_pi.pdf',
+      });
     }
 
-    // Extract HUMIRA ISI line if present
     if (skyriziText.includes('HUMIRA')) {
       isiLines.push({
         toggle: 'Tap here',
@@ -73,7 +79,6 @@ function extractISILines(document) {
     }
   }
 
-  // Extract from list items if structured that way
   const listItems = document.querySelectorAll('li p, [class*="isi"] p');
   listItems.forEach((item) => {
     const text = getText(item);
@@ -97,15 +102,6 @@ function extractISILines(document) {
 function extractIndications(document) {
   const indications = [];
 
-  // Look for indication sections in the ISI modal or main content
-  const indicationSections = document.querySelectorAll('[class*="indication"], h3 + p, dt + dd');
-
-  // Try to find structured indication content
-  const psoriasisEl = document.querySelector('h3:contains("Plaque Psoriasis"), [class*="plaque"]');
-  const psoriaticEl = document.querySelector('h3:contains("Psoriatic Arthritis"), [class*="psoriatic"]');
-  const crohnEl = document.querySelector('h3:contains("Crohn"), [class*="crohn"]');
-
-  // Extract from heading + paragraph pairs
   const headings = document.querySelectorAll('h3');
   headings.forEach((h3) => {
     const headingText = getText(h3);
@@ -129,7 +125,6 @@ function extractIndications(document) {
     }
   });
 
-  // Alternative: look for strong + text patterns
   if (indications.length === 0) {
     const strongEls = document.querySelectorAll('strong, b');
     strongEls.forEach((strong) => {
@@ -161,10 +156,13 @@ function extractCoverage(document) {
   };
 
   // Extract main headline
-  const headline = document.querySelector('h2[class*="headline"], h2, [class*="coverage"] h2');
-  if (headline) {
-    coverage.title = getText(headline);
-  }
+  const headlines = document.querySelectorAll('h2');
+  headlines.forEach((h2) => {
+    const text = getText(h2);
+    if (text.toLowerCase().includes('coverage') || text.toLowerCase().includes('preferred')) {
+      coverage.title = text;
+    }
+  });
 
   // Extract tabs
   const tabEls = document.querySelectorAll('[class*="tab"], [role="tab"]');
@@ -176,13 +174,11 @@ function extractCoverage(document) {
   });
 
   // Extract coverage stats (99%, 97%)
-  // Look for percentage values with labels
   const statContainers = document.querySelectorAll('[class*="stat"], [class*="coverage"]');
   statContainers.forEach((container) => {
     const text = container.textContent;
 
-    // Look for Commercial stat
-    if (text.includes('Commercial') || text.includes('commercial')) {
+    if ((text.includes('Commercial') || text.includes('commercial')) && !coverage.stats.find(s => s.label === 'Commercial')) {
       const percentMatch = text.match(/(\d{2,3})%?/);
       if (percentMatch) {
         coverage.stats.push({
@@ -193,10 +189,9 @@ function extractCoverage(document) {
       }
     }
 
-    // Look for Medicare stat
-    if (text.includes('Medicare') || text.includes('Part D')) {
+    if ((text.includes('Medicare') || text.includes('Part D')) && !coverage.stats.find(s => s.label.includes('Medicare'))) {
       const percentMatch = text.match(/(\d{2,3})%?/);
-      if (percentMatch && !coverage.stats.find(s => s.label.includes('Medicare'))) {
+      if (percentMatch) {
         coverage.stats.push({
           label: 'Medicare Part D',
           value: percentMatch[1],
@@ -237,20 +232,24 @@ function extractCoverage(document) {
   });
 
   // Extract footnote/disclaimer
-  const footnoteEl = document.querySelector('[class*="footnote"], [class*="disclaimer"], .preferred-coverage');
+  const footnoteEl = document.querySelector('[class*="footnote"], [class*="disclaimer"]');
   if (footnoteEl) {
     coverage.footnote = getText(footnoteEl);
   }
 
   // Extract "Preferred coverage means" text
-  const preferredEl = document.querySelector('h2:contains("Preferred"), [class*="preferred"]');
-  if (preferredEl) {
-    const list = preferredEl.parentElement?.querySelector('ul, ol');
-    if (list) {
-      const items = [...list.querySelectorAll('li')].map(li => getText(li));
-      coverage.footnote = `**Preferred coverage means SKYRIZI is AVAILABLE:** ${items.join(' ')}`;
+  const h2Els = document.querySelectorAll('h2');
+  h2Els.forEach((h2) => {
+    const text = getText(h2);
+    if (text.toLowerCase().includes('preferred coverage means')) {
+      const parent = h2.parentElement;
+      const list = parent?.querySelector('ul, ol');
+      if (list) {
+        const items = [...list.querySelectorAll('li')].map(li => getText(li));
+        coverage.footnote = `**${text}** ${items.join(' ')}`;
+      }
     }
-  }
+  });
 
   return coverage;
 }
@@ -267,18 +266,13 @@ function extractSupport(document) {
   };
 
   // Extract "Encourage your patients" title
-  const titleEl = document.querySelector('h2:contains("Encourage"), h2:contains("enroll")');
-  if (titleEl) {
-    support.title = getText(titleEl);
-  } else {
-    // Look for any h2 near support content
-    const h2Els = document.querySelectorAll('h2');
-    h2Els.forEach((h2) => {
-      if (getText(h2).toLowerCase().includes('encourage') || getText(h2).toLowerCase().includes('enroll')) {
-        support.title = getText(h2);
-      }
-    });
-  }
+  const h2Els = document.querySelectorAll('h2');
+  h2Els.forEach((h2) => {
+    const text = getText(h2).toLowerCase();
+    if (text.includes('encourage') || text.includes('enroll')) {
+      support.title = getText(h2);
+    }
+  });
 
   // Extract support cards (Affordability, One-to-One, Bridge)
   const cardHeadings = document.querySelectorAll('h5, h4');
@@ -287,19 +281,19 @@ function extractSupport(document) {
     const parent = heading.parentElement;
     const description = parent?.querySelector('p');
 
-    if (text.includes('AFFORDABILITY')) {
+    if (text.includes('AFFORDABILITY') && !support.cards.find(c => c.title.includes('AFFORDABILITY'))) {
       support.cards.push({
         icon: '$5',
         title: 'AFFORDABILITY',
         description: getText(description) || '',
       });
-    } else if (text.includes('ONE-TO-ONE') || text.includes('SUPPORT')) {
+    } else if ((text.includes('ONE-TO-ONE') || text.includes('SUPPORT')) && !support.cards.find(c => c.title.includes('SUPPORT'))) {
       support.cards.push({
         icon: 'support',
         title: 'ONE-TO-ONE SUPPORT',
         description: getText(description) || '',
       });
-    } else if (text.includes('BRIDGE')) {
+    } else if (text.includes('BRIDGE') && !support.cards.find(c => c.title.includes('BRIDGE'))) {
       support.cards.push({
         icon: 'bridge',
         title: 'BRIDGE PROGRAM ELIGIBILITY',
@@ -309,27 +303,19 @@ function extractSupport(document) {
   });
 
   // Extract CTA button
-  const ctaEl = document.querySelector('a:contains("FIND OUT"), button:contains("FIND OUT"), [class*="cta"]');
-  if (ctaEl) {
-    support.cta = {
-      label: getText(ctaEl),
-      link: ctaEl.href || '/skyrizi-complete',
-    };
-  } else {
-    // Look for any button/link with "find out more"
-    const links = document.querySelectorAll('a, button');
-    links.forEach((link) => {
-      if (getText(link).toLowerCase().includes('find out')) {
-        support.cta = {
-          label: getText(link),
-          link: link.href || '/skyrizi-complete',
-        };
-      }
-    });
-  }
+  const links = document.querySelectorAll('a, button');
+  links.forEach((link) => {
+    const text = getText(link).toLowerCase();
+    if (text.includes('find out') && !support.cta.label) {
+      support.cta = {
+        label: getText(link),
+        link: link.href || '/skyrizi-complete',
+      };
+    }
+  });
 
   // Extract footnotes
-  const footnoteEls = document.querySelectorAll('[class*="footnote"] p, sup + span');
+  const footnoteEls = document.querySelectorAll('[class*="footnote"] p');
   const footnotes = [];
   footnoteEls.forEach((el) => {
     const text = getText(el);
@@ -356,7 +342,7 @@ function extractNavigation(document) {
       const label = getText(el);
       const href = el.href || el.getAttribute('data-href') || '';
 
-      if (label && label.length < 30 && !href.includes('pdf')) {
+      if (label && label.length < 30 && !href.includes('pdf') && !navItems.find(n => n.label === label.toUpperCase())) {
         navItems.push({
           label: label.toUpperCase(),
           link: href || `/${label.toLowerCase().replace(/\s+/g, '-')}`,
@@ -364,21 +350,6 @@ function extractNavigation(document) {
       }
     });
   }
-
-  // Alternative: look for specific nav text
-  const navTexts = ['OVERVIEW', 'H2H', 'PASI', 'SAFETY', 'ACCESS', 'DOSING', 'SUMMARY'];
-  const allEls = document.querySelectorAll('*');
-  allEls.forEach((el) => {
-    const text = getText(el).toUpperCase();
-    navTexts.forEach((navText) => {
-      if (text === navText && !navItems.find(n => n.label === navText)) {
-        navItems.push({
-          label: navText,
-          link: `/content/skyrizi/${navText.toLowerCase().replace(/\s+/g, '-')}`,
-        });
-      }
-    });
-  });
 
   return navItems;
 }
@@ -389,7 +360,6 @@ function extractNavigation(document) {
 function extractSafetyInfo(document) {
   const sections = [];
 
-  // Look for safety sections in ISI modal
   const safetyHeadings = document.querySelectorAll('h2, h3');
   safetyHeadings.forEach((heading) => {
     const text = getText(heading);
@@ -419,29 +389,31 @@ function extractEfficacyData(document) {
   };
 
   // Look for PASI response title
-  const titleEl = document.querySelector('h2:contains("PASI"), [class*="efficacy"] h2');
-  if (titleEl) {
-    data.title = getText(titleEl);
-  }
+  const h2Els = document.querySelectorAll('h2');
+  h2Els.forEach((h2) => {
+    const text = getText(h2);
+    if (text.includes('PASI')) {
+      data.title = text;
+    }
+  });
 
   // Look for PASI values
   const pasiLabels = ['PASI 75', 'PASI 90', 'PASI 100'];
+  const allText = document.body?.textContent || '';
+
   pasiLabels.forEach((label) => {
-    const els = document.querySelectorAll('*');
-    els.forEach((el) => {
-      const text = getText(el);
-      if (text.includes(label)) {
-        const parent = el.parentElement;
-        const percentMatch = parent?.textContent?.match(/(\d{2,3})%/);
-        if (percentMatch) {
-          data.items.push({
-            label: label,
-            value: `${percentMatch[1]}%`,
-            description: `Patients achieving ${label}`,
-          });
-        }
+    if (allText.includes(label) && !data.items.find(i => i.label === label)) {
+      // Try to find associated percentage
+      const regex = new RegExp(label + '[^\\d]*(\\d{2,3})%', 'i');
+      const match = allText.match(regex);
+      if (match) {
+        data.items.push({
+          label: label,
+          value: `${match[1]}%`,
+          description: `Patients achieving ${label}`,
+        });
       }
-    });
+    }
   });
 
   return data;
@@ -546,7 +518,6 @@ function buildAccessPage(doc, brand, isiLines, indications, coverage, support, n
 function buildSafetyPage(doc, brand, isiLines, safetySections, navItems) {
   const elements = [];
 
-  // Hero block
   const heroRows = [['Hero']];
   if (brand.logo) {
     heroRows.push([`<img src="${brand.logo}" alt="SKYRIZI Logo">`, '']);
@@ -556,7 +527,6 @@ function buildSafetyPage(doc, brand, isiLines, safetySections, navItems) {
   });
   elements.push(heroRows);
 
-  // Safety block
   if (safetySections.length > 0) {
     const safetyRows = [['Accordion']];
     safetyRows.push(['Important Safety Information', '']);
@@ -566,13 +536,11 @@ function buildSafetyPage(doc, brand, isiLines, safetySections, navItems) {
     elements.push(safetyRows);
   }
 
-  // Navigation
   if (navItems.length > 0) {
     const navLinks = navItems.map((item) => `<a href="${item.link}">${item.label}</a>`).join(' ');
     elements.push([['Fragment'], [navLinks]]);
   }
 
-  // Metadata
   elements.push([
     ['Metadata'],
     ['title', 'SKYRIZI Safety Information'],
@@ -588,7 +556,6 @@ function buildSafetyPage(doc, brand, isiLines, safetySections, navItems) {
 function buildPasiPage(doc, brand, isiLines, efficacyData, navItems) {
   const elements = [];
 
-  // Hero block
   const heroRows = [['Hero']];
   if (brand.logo) {
     heroRows.push([`<img src="${brand.logo}" alt="SKYRIZI Logo">`, '']);
@@ -598,7 +565,6 @@ function buildPasiPage(doc, brand, isiLines, efficacyData, navItems) {
   });
   elements.push(heroRows);
 
-  // Efficacy block
   if (efficacyData.items.length > 0) {
     const efficacyRows = [['Columns']];
     if (efficacyData.title) {
@@ -609,7 +575,6 @@ function buildPasiPage(doc, brand, isiLines, efficacyData, navItems) {
     });
     elements.push(efficacyRows);
 
-    // Stats block
     const statsRows = [['Cards']];
     efficacyData.items.forEach((item) => {
       statsRows.push([item.value, item.label, item.description]);
@@ -617,13 +582,11 @@ function buildPasiPage(doc, brand, isiLines, efficacyData, navItems) {
     elements.push(statsRows);
   }
 
-  // Navigation
   if (navItems.length > 0) {
     const navLinks = navItems.map((item) => `<a href="${item.link}">${item.label}</a>`).join(' ');
     elements.push([['Fragment'], [navLinks]]);
   }
 
-  // Metadata
   elements.push([
     ['Metadata'],
     ['title', 'SKYRIZI PASI 90-100 Clinical Results'],
@@ -635,16 +598,13 @@ function buildPasiPage(doc, brand, isiLines, efficacyData, navItems) {
 
 /**
  * Main transform function for Helix AEM Importer
- * Extracts content from live site DOM - no hardcoded values
  */
 export default {
   transform: ({ document, url, html, params }) => {
-    // eslint-disable-next-line no-console
     console.log('[SKYRIZI IMPORT] Transform called with URL:', url);
 
     const pageType = detectPageType(url);
 
-    // Extract all content from the live page DOM
     const brand = extractBrandInfo(document);
     const isiLines = extractISILines(document);
     const indications = extractIndications(document);
@@ -654,7 +614,6 @@ export default {
     const safetySections = extractSafetyInfo(document);
     const efficacyData = extractEfficacyData(document);
 
-    // Log extracted data for debugging
     console.log('[SKYRIZI IMPORT] Extracted:', {
       pageType,
       brand,
@@ -685,16 +644,13 @@ export default {
         break;
     }
 
-    // Clear the body and build using WebImporter.DOMUtils.createTable
     const { body } = document;
     body.innerHTML = '';
 
     result.elements.forEach((blockData, index) => {
-      // Use WebImporter.DOMUtils.createTable to create proper block tables
       const table = WebImporter.DOMUtils.createTable(blockData, document);
       body.appendChild(table);
 
-      // Add section divider between blocks (except after last)
       if (index < result.elements.length - 1) {
         body.appendChild(createDivider(document));
       }
