@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>SKYRIZI Access - Helix Importer Template (Live Data Structure)</title>
+  <meta name="description" content="Template structure for SKYRIZI HCP page import">
+</head>
+<body>
+  <!--
+    This template shows the block table structure expected by Helix Importer.
+    IMPORTANT: Block names must use Title Case with spaces to match component-definition.json
+    Use with ski-isi-live-import.js to dynamically extract content from:
+    https://www.skyrizihcp.com/dermatology/coverage-access
+  -->
+
+  <!-- Ski Isi Hero Block -->
+  <table>
+    <tr><th colspan="2">Ski Isi Hero</th></tr>
+    <tr>
+      <td><img src="[EXTRACTED_LOGO_URL]" alt="SKYRIZI Logo"></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>Tap here</td>
+      <td>for SKYRIZI Indications and Important Safety Information. <a href="https://www.rxabbvie.com/pdf/skyrizi_pi.pdf">See Full Prescribing Information</a></td>
+    </tr>
+  </table>
+
+  <hr>
+
+  <!-- Ski Isi Indications Block -->
+  <table>
+    <tr><th colspan="2">Ski Isi Indications</th></tr>
+    <tr>
+      <td>INDICATIONS</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>[CONDITION_1]:</td>
+      <td>[EXTRACTED_INDICATION_TEXT_1]</td>
+    </tr>
+    <tr>
+      <td>[CONDITION_2]:</td>
+      <td>[EXTRACTED_INDICATION_TEXT_2]</td>
+    </tr>
+    <tr>
+      <td>Please see <a href="https://www.rxabbvie.com/pdf/skyrizi_pi.pdf">Full Prescribing Information</a>.</td>
+      <td></td>
+    </tr>
+  </table>
+
+  <hr>
+
+  <!-- Ski Isi Coverage Block -->
+  <table>
+    <tr><th colspan="3">Ski Isi Coverage</th></tr>
+    <tr>
+      <td>[EXTRACTED_HEADLINE]</td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>Overview</td>
+      <td>National</td>
+      <td>Local</td>
+    </tr>
+    <tr>
+      <td>Commercial</td>
+      <td>[EXTRACTED_COMMERCIAL_%]</td>
+      <td>PREFERRED COVERAGE</td>
+    </tr>
+    <tr>
+      <td>Medicare Part D</td>
+      <td>[EXTRACTED_MEDICARE_%]</td>
+      <td>PREFERRED COVERAGE</td>
+    </tr>
+    <tr>
+      <td>[EXTRACTED_FOOTNOTE]</td>
+      <td></td>
+      <td></td>
+    </tr>
+  </table>
+
+  <hr>
+
+  <!-- Ski Isi Support Block -->
+  <table>
+    <tr><th colspan="2">Ski Isi Support</th></tr>
+    <tr>
+      <td>[EXTRACTED_SUPPORT_TITLE]</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td><strong>[CARD_1_TITLE]</strong></td>
+      <td>[CARD_1_DESCRIPTION]</td>
+    </tr>
+    <tr>
+      <td><strong>[CARD_2_TITLE]</strong></td>
+      <td>[CARD_2_DESCRIPTION]</td>
+    </tr>
+    <tr>
+      <td><strong>[CARD_3_TITLE]</strong></td>
+      <td>[CARD_3_DESCRIPTION]</td>
+    </tr>
+    <tr>
+      <td><a href="/skyrizi-complete">FIND OUT MORE</a></td>
+      <td></td>
+    </tr>
+  </table>
+
+  <hr>
+
+  <!-- Ski Isi Nav Block -->
+  <table>
+    <tr><th>Ski Isi Nav</th></tr>
+    <tr>
+      <td><a href="/content/skyrizi/overview">OVERVIEW</a> <a href="/content/skyrizi/h2h">H2H</a> <a href="/content/skyrizi/pasi-90-100">PASI 90-100</a> <a href="/content/skyrizi/safety">SAFETY</a> <a href="/content/skyrizi/access">ACCESS</a></td>
+    </tr>
+  </table>
+
+  <hr>
+
+  <!-- Metadata Block -->
+  <table>
+    <tr><th colspan="2">Metadata</th></tr>
+    <tr>
+      <td>title</td>
+      <td>[EXTRACTED_PAGE_TITLE]</td>
+    </tr>
+    <tr>
+      <td>description</td>
+      <td>[EXTRACTED_META_DESCRIPTION]</td>
+    </tr>
+  </table>
+
+</body>
+</html>
