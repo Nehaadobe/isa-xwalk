@@ -1,0 +1,96 @@
+/* SKI ISI Safety Block Styles */
+
+.ski-isi-safety {
+  padding: 2rem 1rem;
+  background: #fff;
+}
+
+.ski-isi-safety-container {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.safety-section-title {
+  color: #10a4de;
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 3px solid #10a4de;
+}
+
+.safety-section {
+  margin-bottom: 1.5rem;
+}
+
+.safety-heading {
+  color: #10a4de;
+  font-size: 1rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+}
+
+.safety-content {
+  font-size: 0.9rem;
+  color: #333;
+  line-height: 1.6;
+}
+
+.safety-content p {
+  margin-bottom: 0.75rem;
+}
+
+.safety-content ul {
+  margin: 0.5rem 0;
+  padding-left: 1.5rem;
+}
+
+.safety-content li {
+  margin-bottom: 0.5rem;
+}
+
+.safety-content strong {
+  color: #d9534f;
+}
+
+.safety-content a {
+  color: #10a4de;
+  text-decoration: underline;
+}
+
+/* Warning box style */
+.ski-isi-safety .warning-box {
+  background: #fff3cd;
+  border-left: 4px solid #ffc107;
+  padding: 1rem;
+  margin: 1rem 0;
+  border-radius: 0 8px 8px 0;
+}
+
+/* Boxed warning */
+.ski-isi-safety .boxed-warning {
+  border: 2px solid #d9534f;
+  padding: 1rem;
+  margin: 1rem 0;
+  border-radius: 8px;
+  background: #fef2f2;
+}
+
+@media (min-width: 768px) {
+  .ski-isi-safety {
+    padding: 3rem 2rem;
+  }
+
+  .safety-section-title {
+    font-size: 1.75rem;
+  }
+
+  .safety-heading {
+    font-size: 1.1rem;
+  }
+
+  .safety-content {
+    font-size: 0.95rem;
+  }
+}

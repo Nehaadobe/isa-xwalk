@@ -1,0 +1,63 @@
+/* SKI ISI Navigation Block Styles */
+
+.ski-isi-nav {
+  background: #193052;
+  padding: 0;
+  margin: 0;
+  position: sticky;
+  bottom: 0;
+  z-index: 99;
+}
+
+.ski-isi-nav-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0;
+  padding: 0.5rem;
+}
+
+.ski-isi-nav-item {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem 0.75rem;
+  color: #fff;
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-decoration: none;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-radius: 4px;
+  transition: background 0.2s, color 0.2s;
+}
+
+.ski-isi-nav-item:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  text-decoration: none;
+}
+
+.ski-isi-nav-item.active {
+  background: #10a4de;
+  color: #fff;
+}
+
+@media (min-width: 768px) {
+  .ski-isi-nav-wrapper {
+    gap: 0.25rem;
+    padding: 0.75rem 1rem;
+  }
+
+  .ski-isi-nav-item {
+    padding: 0.6rem 1rem;
+    font-size: 0.75rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .ski-isi-nav-item {
+    padding: 0.6rem 1.25rem;
+    font-size: 0.8rem;
+  }
+}

@@ -316,10 +316,55 @@ main > .section > div > p:last-of-type {
 }
 
 /* SKYRIZI Access Page Background */
-body:has(.ski-isa-hero) {
+body:has(.ski-isa-hero),
+body:has(.ski-isi-hero) {
   background-image: url('/content/skyrizi/images/OpenSky.png');
   background-repeat: no-repeat;
   background-position: center top;
   background-size: cover;
   background-attachment: fixed;
+}
+
+/* Hide page title on SKYRIZI pages */
+body:has(.ski-isi-hero) main > div:first-child h1,
+body:has(.ski-isa-hero) main > div:first-child h1 {
+  display: none;
+}
+
+/* Hide metadata block from rendering */
+.metadata {
+  display: none;
+}
+
+/* SKYRIZI Page Layout */
+body:has(.ski-isi-hero) main,
+body:has(.ski-isa-hero) main {
+  padding: 0;
+}
+
+body:has(.ski-isi-hero) main > div,
+body:has(.ski-isa-hero) main > div {
+  margin: 0;
+  padding: 0;
+}
+
+body:has(.ski-isi-hero) header,
+body:has(.ski-isa-hero) header {
+  height: 0;
+  display: none;
+}
+
+/* SKYRIZI brand link colors */
+.ski-isi-hero a,
+.ski-isi-indications a,
+.ski-isi-coverage a,
+.ski-isi-support a,
+.ski-isi-safety a {
+  color: var(--ski-teal, #10a4de);
+}
+
+/* Section dividers */
+body:has(.ski-isi-hero) main > div > hr,
+body:has(.ski-isa-hero) main > div > hr {
+  display: none;
 }

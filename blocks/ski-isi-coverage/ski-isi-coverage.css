@@ -1,0 +1,203 @@
+/* SKI ISI Coverage Block Styles - Matching Live Site */
+
+.ski-isi-coverage {
+  padding: 2rem 1rem;
+  background: #fff;
+  position: relative;
+  overflow: hidden;
+}
+
+.ski-isi-coverage::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 250px;
+  height: 100%;
+  background-image: url('/content/skyrizi/images/baseball-hero.png');
+  background-repeat: no-repeat;
+  background-position: left bottom;
+  background-size: contain;
+  opacity: 0.95;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.ski-isi-coverage-container {
+  max-width: 900px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+
+.coverage-title {
+  color: #10a4de;
+  font-size: 1.4rem;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 1.5rem;
+  line-height: 1.3;
+  text-transform: uppercase;
+}
+
+.coverage-tabs {
+  display: flex;
+  justify-content: center;
+  gap: 0;
+  margin-bottom: 2rem;
+  border-bottom: 2px solid #e0e0e0;
+}
+
+.coverage-tab {
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-bottom: 3px solid transparent;
+  background: transparent;
+  color: #10a4de;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-transform: uppercase;
+  margin-bottom: -2px;
+}
+
+.coverage-tab:hover {
+  background: rgba(16, 164, 222, 0.05);
+}
+
+.coverage-tab.active {
+  border-bottom-color: #10a4de;
+  color: #10a4de;
+  background: transparent;
+}
+
+.coverage-stats-grid {
+  display: flex;
+  justify-content: center;
+  gap: 3rem;
+  margin-bottom: 2rem;
+  padding: 0 1rem;
+}
+
+.coverage-stat-card {
+  text-align: center;
+  position: relative;
+}
+
+.coverage-stat-card .stat-label {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #10a4de;
+  margin-bottom: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Circular Chart Styling with SVG */
+.coverage-stat-card .stat-value {
+  position: relative;
+  width: 160px;
+  height: 160px;
+  margin: 0 auto 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.coverage-stat-card .stat-value svg {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.coverage-stat-card .stat-number {
+  position: relative;
+  z-index: 2;
+  font-size: 2.8rem;
+  font-weight: 700;
+  color: #10a4de;
+  line-height: 1;
+}
+
+.coverage-stat-card .stat-number .percent {
+  font-size: 1.2rem;
+  vertical-align: super;
+  font-weight: 600;
+}
+
+.coverage-stat-card .stat-desc {
+  font-size: 0.7rem;
+  color: #10a4de;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.coverage-stat-card .stat-desc sup {
+  font-size: 0.6rem;
+}
+
+.coverage-footnote {
+  font-size: 0.8rem;
+  color: #333;
+  line-height: 1.6;
+  padding: 1.25rem;
+  background: rgba(16, 164, 222, 0.08);
+  border-left: 4px solid #10a4de;
+  margin-top: 1rem;
+}
+
+.coverage-footnote strong {
+  color: #10a4de;
+  display: block;
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.coverage-footnote ul {
+  margin: 0.5rem 0;
+  padding-left: 1.25rem;
+}
+
+.coverage-footnote li {
+  margin-bottom: 0.25rem;
+}
+
+@media (min-width: 768px) {
+  .ski-isi-coverage {
+    padding: 3rem 2rem;
+  }
+
+  .ski-isi-coverage::before {
+    width: 300px;
+  }
+
+  .coverage-title {
+    font-size: 1.6rem;
+  }
+
+  .coverage-stat-card .stat-value {
+    width: 160px;
+    height: 160px;
+    font-size: 3rem;
+  }
+
+  .coverage-stat-card .stat-value .percent {
+    font-size: 1.5rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .coverage-stats-grid {
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+  }
+
+  .ski-isi-coverage::before {
+    opacity: 0.3;
+    width: 150px;
+  }
+}

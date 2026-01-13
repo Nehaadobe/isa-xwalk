@@ -633,5 +633,401 @@
         "description": "Mark as current/active page"
       }
     ]
+  },
+  {
+    "id": "ski-isi-hero",
+    "fields": [
+      {
+        "component": "reference",
+        "valueType": "string",
+        "name": "logo",
+        "label": "Logo Image",
+        "multi": false
+      }
+    ]
+  },
+  {
+    "id": "ski-isi-hero-isi-line",
+    "fields": [
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "toggleText",
+        "label": "Toggle Text"
+      },
+      {
+        "component": "richtext",
+        "valueType": "string",
+        "name": "isiContent",
+        "label": "ISI Content"
+      }
+    ]
+  },
+  {
+    "id": "ski-isi-nav-item",
+    "fields": [
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "label",
+        "label": "Label"
+      },
+      {
+        "component": "aem-content",
+        "name": "link",
+        "label": "Link"
+      },
+      {
+        "component": "boolean",
+        "name": "isActive",
+        "label": "Active"
+      }
+    ]
+  },
+  {
+    "id": "ski-isi-stats",
+    "fields": [
+      {
+        "component": "richtext",
+        "valueType": "string",
+        "name": "title",
+        "label": "Section Title"
+      }
+    ]
+  },
+  {
+    "id": "ski-isi-stat-item",
+    "fields": [
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "value",
+        "label": "Value"
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "label",
+        "label": "Label"
+      },
+      {
+        "component": "richtext",
+        "valueType": "string",
+        "name": "description",
+        "label": "Description"
+      }
+    ]
+  },
+  {
+    "id": "ski-isi-comparison",
+    "fields": [
+      {
+        "component": "richtext",
+        "valueType": "string",
+        "name": "title",
+        "label": "Title"
+      }
+    ]
+  },
+  {
+    "id": "ski-isi-comparison-row",
+    "fields": [
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "label",
+        "label": "Row Label"
+      },
+      {
+        "component": "richtext",
+        "valueType": "string",
+        "name": "value1",
+        "label": "Value 1"
+      },
+      {
+        "component": "richtext",
+        "valueType": "string",
+        "name": "value2",
+        "label": "Value 2"
+      }
+    ]
+  },
+  {
+    "id": "ski-isi-efficacy",
+    "fields": [
+      {
+        "component": "richtext",
+        "valueType": "string",
+        "name": "title",
+        "label": "Title"
+      },
+      {
+        "component": "richtext",
+        "valueType": "string",
+        "name": "footnote",
+        "label": "Footnote"
+      }
+    ]
+  },
+  {
+    "id": "ski-isi-efficacy-item",
+    "fields": [
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "label",
+        "label": "Label"
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "value",
+        "label": "Value"
+      },
+      {
+        "component": "richtext",
+        "valueType": "string",
+        "name": "description",
+        "label": "Description"
+      }
+    ]
+  },
+  {
+    "id": "ski-isi-coverage",
+    "fields": [
+      {
+        "component": "richtext",
+        "valueType": "string",
+        "name": "title",
+        "label": "Title"
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "tab1",
+        "label": "Tab 1",
+        "value": "Overview"
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "tab2",
+        "label": "Tab 2",
+        "value": "National"
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "tab3",
+        "label": "Tab 3",
+        "value": "Local"
+      },
+      {
+        "component": "richtext",
+        "valueType": "string",
+        "name": "footnote",
+        "label": "Footnote"
+      }
+    ]
+  },
+  {
+    "id": "ski-isi-support",
+    "fields": [
+      {
+        "component": "richtext",
+        "valueType": "string",
+        "name": "title",
+        "label": "Title"
+      },
+      {
+        "component": "richtext",
+        "valueType": "string",
+        "name": "ctaText",
+        "label": "CTA Text"
+      },
+      {
+        "component": "aem-content",
+        "name": "ctaLink",
+        "label": "CTA Link"
+      },
+      {
+        "component": "richtext",
+        "valueType": "string",
+        "name": "footnotes",
+        "label": "Footnotes"
+      }
+    ]
+  },
+  {
+    "id": "ski-isi-support-card",
+    "fields": [
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "icon",
+        "label": "Icon Key"
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "title",
+        "label": "Card Title"
+      },
+      {
+        "component": "richtext",
+        "valueType": "string",
+        "name": "description",
+        "label": "Description"
+      }
+    ]
+  },
+  {
+    "id": "ski-isi-indications",
+    "fields": [
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "title",
+        "label": "Title",
+        "value": "Indications"
+      },
+      {
+        "component": "richtext",
+        "valueType": "string",
+        "name": "piLink",
+        "label": "PI Link Text"
+      },
+      {
+        "component": "aem-content",
+        "name": "piUrl",
+        "label": "PI Link URL"
+      }
+    ]
+  },
+  {
+    "id": "ski-isi-indication-item",
+    "fields": [
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "condition",
+        "label": "Condition"
+      },
+      {
+        "component": "richtext",
+        "valueType": "string",
+        "name": "description",
+        "label": "Description"
+      }
+    ]
+  },
+  {
+    "id": "ski-isi-safety",
+    "fields": [
+      {
+        "component": "richtext",
+        "valueType": "string",
+        "name": "title",
+        "label": "Section Title"
+      }
+    ]
+  },
+  {
+    "id": "ski-isi-safety-section",
+    "fields": [
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "heading",
+        "label": "Heading"
+      },
+      {
+        "component": "richtext",
+        "valueType": "string",
+        "name": "content",
+        "label": "Content"
+      }
+    ]
+  },
+  {
+    "id": "ski-isi-tab-item",
+    "fields": [
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "label",
+        "label": "Tab Label"
+      },
+      {
+        "component": "richtext",
+        "valueType": "string",
+        "name": "content",
+        "label": "Tab Content"
+      }
+    ]
+  },
+  {
+    "id": "ski-isi-card-item",
+    "fields": [
+      {
+        "component": "reference",
+        "valueType": "string",
+        "name": "image",
+        "label": "Card Image",
+        "multi": false
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "title",
+        "label": "Title"
+      },
+      {
+        "component": "richtext",
+        "valueType": "string",
+        "name": "description",
+        "label": "Description"
+      },
+      {
+        "component": "aem-content",
+        "name": "link",
+        "label": "Link"
+      }
+    ]
+  },
+  {
+    "id": "ski-isi-chart",
+    "fields": [
+      {
+        "component": "richtext",
+        "valueType": "string",
+        "name": "title",
+        "label": "Chart Title"
+      }
+    ]
+  },
+  {
+    "id": "ski-isi-chart-data",
+    "fields": [
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "label",
+        "label": "Data Label"
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "value",
+        "label": "Value"
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "color",
+        "label": "Bar Color",
+        "value": "#10a4de"
+      }
+    ]
   }
 ]

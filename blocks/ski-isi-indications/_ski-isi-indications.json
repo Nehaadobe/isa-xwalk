@@ -1,0 +1,69 @@
+{
+  "definitions": [
+    {
+      "title": "SKI ISI Indications",
+      "id": "ski-isi-indications",
+      "plugins": {
+        "xwalk": {
+          "page": {
+            "resourceType": "core/franklin/components/block/v1/block",
+            "template": {
+              "name": "Ski Isi Indications",
+              "model": "ski-isi-indications",
+              "filter": "ski-isi-indications"
+            }
+          }
+        }
+      }
+    }
+  ],
+  "models": [
+    {
+      "id": "ski-isi-indications",
+      "fields": [
+        {
+          "component": "text",
+          "valueType": "string",
+          "name": "title",
+          "label": "Title",
+          "value": "Indications"
+        },
+        {
+          "component": "richtext",
+          "valueType": "string",
+          "name": "piLink",
+          "label": "PI Link Text"
+        },
+        {
+          "component": "aem-content",
+          "name": "piUrl",
+          "label": "PI Link URL"
+        }
+      ]
+    },
+    {
+      "id": "ski-isi-indication-item",
+      "fields": [
+        {
+          "component": "text",
+          "valueType": "string",
+          "name": "condition",
+          "label": "Condition",
+          "description": "e.g., Plaque Psoriasis"
+        },
+        {
+          "component": "richtext",
+          "valueType": "string",
+          "name": "description",
+          "label": "Description"
+        }
+      ]
+    }
+  ],
+  "filters": [
+    {
+      "id": "ski-isi-indications",
+      "components": ["ski-isi-indication-item"]
+    }
+  ]
+}
